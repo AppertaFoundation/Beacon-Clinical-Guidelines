@@ -1,0 +1,104 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div class="modal-body">
+    <div class="row margin-bottom-15">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <div ng-if="block">
+                <h3 style="margin-top: 0;">Edit this item</h3>
+                <p>Change this items content below or change it to a different item type. Once complete click save to return to the main page.</p>
+
+                <div class="btn-group btn-group" role="group" style="margin-bottom: 5px;">
+                    <a ng-click="blockType('text');" ng-if="block.type !== 'image'" class="btn btn-{{(block.type  === 'text') ? 'success' : 'default'}}"><i class="fa fa-font"></i></a>
+                    <a ng-click="blockType('unordered');" ng-if="block.type !== 'image'" class="btn btn-{{(block.type  === 'unordered') ? 'success' : 'default'}}"><i class="fa fa-list-ul"></i></a>
+                    <a ng-click="blockType('ordered');" ng-if="block.type !== 'image'" class="btn btn-{{(block.type  === 'ordered') ? 'success' : 'default'}}"><i class="fa fa-list-ol"></i></a>
+                    <a ng-click="blockType('link');" ng-if="block.type !== 'image'" class="btn btn-{{(block.type  === 'link') ? 'success' : 'default'}}"><i class="fa fa-link"></i></a>
+                    <a ng-click="blockType('table');" ng-if="block.type !== 'image'" class="btn btn-{{(block.type  === 'table') ? 'success' : 'default'}}"><i class="fa fa-table"></i></a>
+                    <a ng-click="blockType('image');" ng-if="block.type === 'image'" class="btn btn-{{(block.type  === 'image') ? 'success' : 'default'}}"><i class="fa fa-picture-o"></i></a>
+                </div>
+                <div ng-if="block.type === 'text'" style="margin-bottom: 5px;">
+                    <textarea ng-model="block.input" style="width: 570px !important; max-width: 570px !important; height: 200px;"></textarea>
+                </div>
+                <div ng-if="block.type === 'unordered' || block.type === 'ordered'" style="margin-bottom: 5px;">
+                    <input type="text" autocomplete="off" style="width: 440px !important; max-width: 440px !important;" ng-model="block.input">
+                </div>
+                <div ng-if="block.type === 'link'" style="margin-bottom: 5px;">
+                    <input type="text" autocomplete="off" style="width: 220px !important; max-width: 220px !important;" ng-model="block.input">
+                    <input type="text" autocomplete="off" style="width: 220px !important; max-width: 220px !important;" ng-model="block.url" placeholder="Link address">
+                </div>
+                <div ng-if="block.type === 'table'">
+                    <p>
+                        Specify how many columns:
+                        <input type="number" autocomplete="off" style="width: 100px !important; max-width: 100px !important;" ng-model="returnValue.numberColumns">
+                        and rows:
+                        <input type="number" autocomplete="off" style="width: 100px !important; max-width: 100px !important;" ng-model="returnValue.numberRows">
+                        this table should have and click update.
+                        <button class="btn btn-xs btn-primary" type="submit" ng-click="createTable()">Update</button>
+                    </p>
+                    <p ng-if="tableErrors" class="error-block">{{tableErrors}}</p>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-repeat="(rowKey, row) in tableInputs">
+                        <input ng-if="rowKey === 0" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" ng-repeat="column in row" type="text" placeholder="heading" style="margin: 2px; padding: 0;" ng-model="column.value"/>
+                        <input ng-if="rowKey != 0" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" ng-repeat="column in row" type="text" style="margin: 2px; padding: 0;" ng-model="column.value"/>
+                    </div>
+                </div>
+                <div ng-if="block.type === 'image'">
+                    <p ng-repeat="(key, image) in images track by image.PreviewId">
+                        <img ng-src="data:image/png;base64, {{image.image}}" style="height: 50px; border: 1px solid black;">
+                        <span style="position: absolute; left: 100px; line-height: 50px; vertical-align: middle;">
+                            {{image.OriginalFileName}} - added by {{image.UploadedBy}}
+                            <span>
+                                <button class="btn btn-xs btn-danger " type="button" ng-click="returnValue(image)">Select</button>
+                            </span>
+                        </span>
+                    </p>
+                </div>
+
+                <button class="btn btn-primary" type="submit" ng-click="returnBlock()">Save</button>
+                <button class="btn btn-warning" type="button" ng-click="dismissModal()">Close</button>
+            </div>
+            <div ng-if="!block">
+                <input ng-if="!isText() && !isLink() && !isTable() && !isImages()" type="text" autocomplete="off" style="width: 440px !important; max-width: 440px !important;" ng-model="returnValue.value" placeholder="Add a new {{type}}">
+                <textarea ng-if="isText()" ng-model="returnValue.value" style="width: 570px !important; max-width: 570px !important; height: 200px;" placeholder="Add a new {{type}}"></textarea>
+
+                <input ng-if="isLink()" type="text" autocomplete="off" style="width: 220px !important; max-width: 220px !important;" ng-model="returnValue.value" placeholder="Link text">
+                <input ng-if="isLink()" type="text" autocomplete="off" style="width: 220px !important; max-width: 220px !important;" ng-model="returnValue.url" placeholder="Link address">
+
+                <div ng-if="isTable()">
+                    <p>
+                        Specify how many columns:
+                        <input type="number" autocomplete="off" style="width: 100px !important; max-width: 100px !important;" ng-model="returnValue.numberColumns">
+                        and rows:
+                        <input type="number" autocomplete="off" style="width: 100px !important; max-width: 100px !important;" ng-model="returnValue.numberRows">
+                        this table should have and click update.
+                        <button class="btn btn-xs btn-primary" type="submit" ng-click="createTable()">Update</button>
+                    </p>
+                    <p ng-if="tableErrors" class="error-block">{{tableErrors}}</p>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-repeat="(rowKey, row) in tableInputs">
+                        <input ng-if="rowKey === 0" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" ng-repeat="column in row" type="text" placeholder="heading" style="margin: 2px; padding: 0;" ng-model="column.value"/>
+                        <input ng-if="rowKey != 0" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" ng-repeat="column in row" type="text" style="margin: 2px; padding: 0;" ng-model="column.value"/>
+                    </div>
+                </div>
+                
+                <div ng-if="isImages()">
+                    <p ng-repeat="(key, image) in images track by image.PreviewId">
+                        <img ng-src="data:image/png;base64, {{image.image}}" style="height: 50px; border: 1px solid black;">
+                        <span style="position: absolute; left: 100px; line-height: 50px; vertical-align: middle;">
+                            {{image.OriginalFileName}} - added by {{image.UploadedBy}}  
+                            <span>
+                                <button class="btn btn-xs btn-danger " type="button" ng-click="returnValue(image)">Select</button>
+                            </span>
+                        </span>
+                    </p>
+                </div>
+
+                <button class="btn btn-primary" type="submit" ng-click="returnValue()" ng-if="!isImages()">Add</button>
+                <button class="btn btn-warning" type="button" ng-click="dismissModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

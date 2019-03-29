@@ -1,0 +1,90 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div ng-init="paginateArticles()">
+    <h2>Articles Administration</h2>
+    <p>Below is a list of current articles associated with beacon.</p>
+    <p class="error-block-large">{{apiErrors}}</p>
+
+    <div>
+        <div ng-if="!articles.length">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left" style="padding-left: 0;">
+                <span ng-if="loadComplete">
+                    <input ng-model="pagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && pageChanged()" ng-blur="pageChanged()">
+                </span>
+
+                <button class="btn btn-primary" type="submit" ng-click="toggleExtraFilters()">{{(pagination.showExtraFilters) ? 'Hide' : 'Show'}} other filters</button>
+            </div>
+        </div>
+
+        <div ng-if="articles.length">
+            <div class="col-lg-4 col-md-4 col-sm-5 col-xs-4 text-left" style="padding-left: 0;">
+                <span ng-if="loadComplete">
+                    <input ng-model="pagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && pageChanged()" ng-blur="pageChanged()">
+                </span>
+                
+                <button class="btn btn-primary" type="submit" ng-click="toggleExtraFilters()">{{(pagination.showExtraFilters) ? 'Hide' : 'Show'}} other filters</button>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-5 col-xs-4 text-center">
+                <uib-pagination total-items="pagination.totalItems" items-per-page="pagination.pageSize" max-size="5" ng-model="pagination.currentPage" ng-change="pageChanged()" boundary-links="true"></uib-pagination>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-2 col-xs-4 text-right" style="padding-right: 0;">
+                <select ng-model="pagination.pageSize"
+                        class="form-control"
+                        style="width: 185px; display: inline;"
+                        ng-options="pageSize.Id as pageSize.Name for pageSize in pageSizeOptions"
+                        ng-change="pageChanged()"></select>
+            </div>
+        </div>
+
+        <div ng-if="pagination.showExtraFilters">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 0;">
+                <select style="display: inline;" ng-model="pagination.container" class="form-control" ng-options="container.Id as container.ShortName for container in departmentContainers" ng-change="pageChanged()"><option value="">Filter by area</option></select>
+                <select style="display: inline;" ng-model="pagination.department" class="form-control" ng-options="department.Id as department.ShortName for department in departments" ng-change=";pageChanged()"><option value="">Filter by department</option></select>
+                <select style="display: inline;" ng-model="pagination.subSectionTab" class="form-control" ng-options="subsection.Id as subsection.Name for subsection in subSectionTabs" ng-change=";resetSubSectionTabs();pageChanged()"><option value="">Filter by section</option></select>
+            </div>
+        </div>
+
+        <table ng-show="articles.length" class="table table-striped table-hover table-condensed adminTable">
+            <tr>
+                <th style="width: 20%;">Title</th>
+                <th style="width: 20%;">Department(s)</th>
+                <th style="width: 20%;">Section</th>
+                <th style="width: 10%;">Status</th>
+                <th style="width: 10%;">Viewed</th>
+                <th style="width: 10%;">Actions</th>
+                <th style="width: 10%; text-align: center;">Expiry Status</th>
+            </tr>
+            <tr ng-repeat="article in articles">
+                <td>{{article.Title}}</td>
+                <td><span ng-repeat="department in article.Departments">{{department.Name}}<span style="font-size: 0.8em;"> (within {{department.Container.ShortName}})</span>{{$last ? '' : ', '}}</span><br/></td>
+                <td>{{article.SubTitle}}</td>
+                <td><span ng-if="article.Archived">Archived</span><span ng-if="!article.Archived">{{article.Live ? 'Live' : 'Not Live'}}</span></td>
+                <td>{{article.Viewed}}</td>
+                <td>
+                    <div class="btn-group btn-group" role="group">
+                        <a ui-sref="articles.form({articleId: article.Id})" class="btn btn-xs btn-warning modalTrigger" ng-if="(user.SiteAdmin || user.LeadClinician || user.ContentEditor || user.ContentApprover) && !article.Archived"><i class="fa fa-edit"></i> Edit</a>
+                        <a ng-click="archiveArticle(article.Id);$event.stopPropagation();" class="btn btn-xs btn-danger modalTrigger" ng-if="(user.SiteAdmin || user.LeadClinician || user.ContentApprover) && !article.Archived"><i class="fa fa-times"></i> Archive</a>
+                        <a ng-click="unArchiveArticle(article.Id);$event.stopPropagation();" class="btn btn-xs btn-danger modalTrigger" ng-if="(user.SiteAdmin || user.LeadClinician || user.ContentApprover) && article.Archived"><i class="fa fa-times"></i> Unarchive</a>
+                    </div>
+                </td>
+                <td>
+                    <i class="fa fa-exclamation-triangle fa-td" aria-hidden="true" style="color: red;" ng-if="articleExpired(article.ExpiryDateTime)"></i>
+                    <i class="fa fa-exclamation-triangle fa-td" aria-hidden="true" style="color: orange;" ng-if="articleExpiring(article.ExpiryDateTime)"></i>
+                </td>
+            </tr>
+        </table>
+
+        <p ng-show="((!articles.length && loadComplete) || apiErrors) && !pagination.searchTerm">There are currently no articles in the database.</p>
+        <p ng-show="((!articles.length && loadComplete) || apiErrors) && pagination.searchTerm">Your search produced 0 results.</p>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right" style="padding-right: 0;">
+            <button class="btn btn-primary" type="button" ng-click="addArticle()" ng-if="(user.SiteAdmin || user.LeadClinician || user.ContentEditor || user.ContentApprover) && loadComplete">Add a new article</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,188 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<form name="form.department" novalidate>
+    <div ng-init="initialiseDepartmentsForm()">
+        <div class="row margin-bottom-15">
+            <div class="form-group">
+                <input ng-if="department.Id" type="hidden" name="Id" class="form-control" ng-model="department.Id">
+                <input ng-if="department._id" type="hidden" name="_id" class="form-control" ng-model="department._id">
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
+                <div class="form-group">
+                    <label>Is this a department container?</label>
+                    <input class="form-control" style="width: 10%;" type="checkbox" autocomplete="off" name="Container" ng-model="department.Container" ng-click="validateContainerFields()" ng-disabled="!checkDepartmentPermissions()">
+                </div>
+
+                <div class="form-group">
+                    <label>{{department.Container ? 'Container' : 'Department'}} Name</label>
+                    <input type="text" autocomplete="off" name="Name" class="form-control" ng-model="department.Name" ng-disabled="!checkDepartmentPermissions()" required>
+                    <p ng-show="form.department.Name.$invalid && !form.department.Name.$pristine" class="error-block">{{department.Container ? 'Container' : 'Department'}} name is required.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>{{department.Container ? 'Container' : 'Department'}} Short Name</label>
+                    <input type="text" autocomplete="off" name="ShortName" class="form-control" ng-model="department.ShortName" ng-disabled="!checkDepartmentPermissions()" required>
+                    <p ng-show="form.department.ShortName.$invalid && !form.department.ShortName.$pristine" class="error-block">{{department.Container ? 'Container' : 'Department'}} short name is required.</p>
+                </div>
+
+                <div class="form-group" ng-if="!department.Container">
+                    <label>Container</label>
+                    <select ng-model="department.ContainerId"
+                            ng-disabled="!checkDepartmentPermissions()"
+                            class="form-control"
+                            ng-options="departmentContainer.Id as departmentContainer.Name for departmentContainer in departmentContainers"
+                            ng-click="validateContainerFields()"></select>
+                </div>
+
+                <div class="form-group">
+                    <label>Current State<span ng-if="!department.Live">, making this {{department.Container ? 'Container' : 'Department'}} live will make it available in the beacon app when saved</span></label>
+                    <md-switch ng-model="department.Live" name="Live" aria-label="Make live" ng-disabled="!checkDepartmentPermissions()">{{department.Live ? 'Live' : 'Not Live'}}</md-switch>
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-md-8 col-sm-8 col-xs-8 colorPicker" ng-if="checkDepartmentPermissions()">
+                <label>Theming Options</label>
+                <p>Select the colours used within the app for this {{department.Container ? 'Container' : 'Department'}}.
+                    <span ng-if="!department.Container">The main colours are used throughout your departments area and the side menu colours are used in a cycle. All main colours are used however you are open to choose between 1 and 5 colours for the side menu.</span>
+                    <span ng-if="department.Container">For containers just select a colour that will be used for the menu item in the app.</span>
+                </p>
+                <p class="help-block" ng-if="!themeCorrect">
+                    <span ng-if="!department.Container">All main theme colours need to be set and at least the first side menu colour.</span>
+                    <span ng-if="department.Container">Please select a main theme colour.</span>
+                </p>
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <label>Main Theme Colours</label>
+                            <div layout="row" layout-sm="column" layout-wrap>
+                                <md-color-menu color="department.MainColour" on-success-callback="checkTheme();">
+                                    <md-button class="md-raised" aria-label="Select color" ng-style="department.MainColour.style">
+                                        <span>Title</span>
+                                        <p class="small">{{(department.MainColour.name) ? department.MainColour.name : 'Unselected' }}</p>
+                                    </md-button>
+                                </md-color-menu>
+                                <md-color-menu color="department.SubColour" on-success-callback="checkTheme();" ng-if="!department.Container">
+                                    <md-button class="md-raised" aria-label="Select color" ng-style="department.SubColour.style">
+                                        <span>Sub Title</span>
+                                        <p class="small">{{(department.SubColour.name) ? department.SubColour.name : 'Unselected' }}</p>
+                                    </md-button>
+                                </md-color-menu>
+                                <md-color-menu color="department.BackgroundColour" on-success-callback="checkTheme();" ng-if="!department.Container">
+                                    <md-button class="md-raised" aria-label="Select color" ng-style="department.BackgroundColour.style">
+                                        <span>Background</span>
+                                        <p class="small">{{(department.BackgroundColour.name) ? department.BackgroundColour.name : 'Unselected' }}</p>
+                                    </md-button>
+                                </md-color-menu>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-if="!department.Container">
+                        <div class="form-group">
+                            <label>Side Menu Colours</label>
+                            <div layout="row" layout-sm="column" layout-wrap>
+                                <md-color-menu color="department.SideColourVariationOne" on-success-callback="checkTheme();">
+                                    <md-button class="md-raised" aria-label="Select color" ng-style="department.SideColourVariationOne.style">
+                                        <span>1</span>
+                                        <p class="small">{{(department.SideColourVariationOne.name) ? department.SideColourVariationOne.name : 'Unselected' }}</p>
+                                    </md-button>
+                                </md-color-menu>
+                                <md-color-menu color="department.SideColourVariationTwo" on-success-callback="checkTheme();">
+                                    <md-button class="md-raised" aria-label="Select color" ng-style="department.SideColourVariationTwo.style">
+                                        <span>2</span>
+                                        <p class="small">{{(department.SideColourVariationTwo.name) ? department.SideColourVariationTwo.name : 'Unselected' }}</p>
+                                    </md-button>
+                                </md-color-menu>
+                                <md-color-menu color="department.SideColourVariationThree" on-success-callback="checkTheme();">
+                                    <md-button class="md-raised" aria-label="Select color" ng-style="department.SideColourVariationThree.style">
+                                        <span>3</span>
+                                        <p class="small">{{(department.SideColourVariationThree.name) ? department.SideColourVariationThree.name : 'Unselected' }}</p>
+                                    </md-button>
+                                </md-color-menu>
+                                <md-color-menu color="department.SideColourVariationFour" on-success-callback="checkTheme();">
+                                    <md-button class="md-raised" aria-label="Select color" ng-style="department.SideColourVariationFour.style">
+                                        <span>4</span>
+                                        <p class="small">{{(department.SideColourVariationFour.name) ? department.SideColourVariationFour.name : 'Unselected' }}</p>
+                                    </md-button>
+                                </md-color-menu>
+                                <md-color-menu color="department.SideColourVariationFive" on-success-callback="checkTheme();">
+                                    <md-button class="md-raised" aria-label="Select color" ng-style="department.SideColourVariationFive.style">
+                                        <span>5</span>
+                                        <p class="small">{{(department.SideColourVariationFive.name) ? department.SideColourVariationFive.name : 'Unselected' }}</p>
+                                    </md-button>
+                                </md-color-menu>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+        <hr style="margin-top:5px;"/>
+        <div ng-if="checkDepartmentPermissions()">
+            <p class="error-block" ng-if="apiErrors">{{apiErrors}}</p>
+            <button class="btn btn-primary" type="button" ng-click="saveDepartment()" ng-disabled="form.department.$invalid || !themeCorrect || !containerFieldsValid || apiErrors">Save</button>
+            <button class="btn btn-warning" type="button" ui-sref="departments.list">Back</button>
+        </div>
+        <hr style="margin-bottom:5px;"/>
+        <div class="row margin-bottom-15">
+            <div ng-if="department.Id && !department.Container" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div ng-init="paginateLiveSubSectionTabs()" class="row">
+                    <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+                        <p><strong>Sub Sections</strong></p>
+                        <p>Currently assigned sub sections:</p>
+                        <table ng-show="department && department.SubSectionTabs && department.SubSectionTabs.length" class="table table-striped table-hover table-condensed userTable">
+                            <tr ng-repeat="subSectionTab in department.SubSectionTabs">
+                                <td style="width: 75%;">
+                                    <i style="font-size: 1.5em; line-height: 10px;" class="{{subSectionTab.Icon}}"></i> {{subSectionTab.Name}}
+                                </td>
+                                <td style="width: 25%;"><button class="btn btn-primary" type="button" ng-click="removeSubSectionFromDepartment(subSectionTab.Id)">-</button></td>
+                            </tr>
+                        </table>
+                        <p ng-if="!department.SubSectionTabs || !department.SubSectionTabs.length">None at present, use the form to the right to add sections.</p>
+                    </div>
+                    <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
+                        <p>Below is a list of available sub sections choose which are associated with this department.</p>
+
+                        <div ng-if="!subSectionTabs.length">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left" style="padding-left: 0;">
+                                <span>
+                                    <input ng-model="subSectionTabPagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && subSectionTabPageChanged()" ng-blur="subSectionTabPageChanged()">
+                                </span>
+                            </div>
+                        </div>
+
+                        <div ng-if="subSectionTabs.length">
+                            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 text-left" style="padding-left: 0;">
+                                <span>
+                                    <input ng-model="subSectionTabPagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && subSectionTabPageChanged()" ng-blur="subSectionTabPageChanged()">
+                                </span>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-4 col-xs-4 text-center">
+                                <uib-pagination total-items="subSectionTabPagination.totalItems" items-per-page="subSectionTabPagination.pageSize" ng-model="subSectionTabPagination.currentPage" ng-change="subSectionTabPageChanged()"></uib-pagination>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 text-right" style="padding-right: 0;">
+                                <button class="btn btn-warning" type="button" ui-sref="subSectionTabs.form">Create new</button>
+                            </div>
+                        </div>
+
+                        <table ng-show="subSectionTabs.length" class="table table-striped table-hover table-condensed userTable">
+                            <tr ng-repeat="subSectionTab in subSectionTabs">
+                                <td style="width: 75%;">
+                                    <i style="font-size: 1.5em; line-height: 10px;" class="{{subSectionTab.Icon}}"></i> {{subSectionTab.Name}}
+                                </td>
+                                <td style="width: 25%;"><button class="btn btn-primary" type="button" ng-click="addSubSectionToDepartment(subSectionTab.Id)" ng-disabled="isSubSectionTabAlreadyAssignedToDepartment(subSectionTab.Id)">+</button></td>
+                            </tr>
+                        </table>
+                    </div>  
+                </div>
+            </div>
+        </div>        
+    </div>
+</form>

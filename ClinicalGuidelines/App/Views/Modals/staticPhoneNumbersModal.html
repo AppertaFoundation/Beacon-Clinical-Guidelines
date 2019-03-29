@@ -1,0 +1,54 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div class="modal-header">
+    <h3 class="modal-title">{{staticPhoneNumber.Id ? 'Edit this' : 'Add a'}} department static phone number</h3>
+</div>
+<form name="form.staticPhoneNumber" novalidate>
+    <div class="modal-body">
+        <div class="row margin-bottom-15">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    <input ng-if="staticPhoneNumber.Id" type="hidden" name="Id" class="form-control" ng-model="staticPhoneNumber.Id">
+                    <input ng-if="staticPhoneNumber._id" type="hidden" name="_id" class="form-control" ng-model="staticPhoneNumber._id">
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" autocomplete="off" name="Title" class="form-control" ng-model="staticPhoneNumber.Title" required ng-disabled="!checkUserPermissions()">
+                    <p ng-show="form.staticPhoneNumber.Title.$invalid && !form.staticPhoneNumber.Title.$pristine" class="error-block">Title is required.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Type</label>
+                    <select ng-model="staticPhoneNumber.Type" name="Type" class="form-control" ng-options="Type.Id as Type.Name for (key, Type) in staticPhoneNumberTypeOptions" required>
+                        <option value="">No type selected</option>
+                    </select>
+                    <p ng-show="form.staticPhoneNumber.Type.$invalid" class="error-block">Type needs to be selected.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" autocomplete="off" name="PhoneNumber" class="form-control" ng-model="staticPhoneNumber.PhoneNumber" required ng-disabled="!checkUserPermissions()">
+                    <p ng-show="form.staticPhoneNumber.PhoneNumber.$invalid && !form.staticPhoneNumber.PhoneNumber.$pristine" class="error-block">Surname is required.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Department</label>
+                    <select ng-model="staticPhoneNumber.DepartmentId" name="DepartmentId" class="form-control" ng-options="department.Id as department.Name for (key, department) in departments" required ng-disabled="!checkUserPermissions()">
+                        <option value="">No department selected</option>
+                    </select>
+                    <p ng-show="form.staticPhoneNumber.DepartmentId.$invalid" class="error-block">Department needs to be selected.</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" ng-if="checkUserPermissions()">
+            <p class="error-block" ng-if="apiErrors">{{apiErrors}}</p>
+            <button class="btn btn-primary" type="submit" ng-click="saveModel('StaticPhoneNumber')" ng-disabled="form.staticPhoneNumber.$invalid || apiErrors">{{staticPhoneNumber.Id ? 'Edit' : 'Add'}}</button>
+            <button class="btn btn-warning" type="button" ng-click="closeModal()">Close</button>
+        </div>
+    </div>
+</form>

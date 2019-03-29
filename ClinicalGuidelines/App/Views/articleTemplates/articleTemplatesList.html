@@ -1,0 +1,63 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div ng-init="paginateArticleTemplates()">
+    <h2>Articles Template Administration</h2>
+    <p>Below is a list of current article templates associated with beacon.</p>
+    <p class="error-block-large">{{apiErrors}}</p>
+
+    <div>
+        <div ng-if="!articleTemplates.length">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left" style="padding-left: 0;">
+                <span ng-if="loadComplete">
+                    <input ng-model="pagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && pageChanged()" ng-blur="pageChanged()">
+                </span>
+            </div>
+        </div>
+
+        <div ng-if="articleTemplates.length">
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 text-left" style="padding-left: 0;">
+                <span ng-if="loadComplete">
+                    <input ng-model="pagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && pageChanged()" ng-blur="pageChanged()">
+                </span>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-4 col-xs-4 text-center">
+                <uib-pagination total-items="pagination.totalItems" items-per-page="pagination.pageSize" ng-model="pagination.currentPage" ng-change="pageChanged()"></uib-pagination>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 text-right" style="padding-right: 0;">
+                <select ng-model="pagination.pageSize"
+                        class="form-control"
+                        style="width: 185px; display: inline;"
+                        ng-options="pageSize.Id as pageSize.Name for pageSize in pageSizeOptions"
+                        ng-change="pageChanged()"></select>
+            </div>
+        </div>
+        
+        <table ng-show="articleTemplates.length" class="table table-striped table-hover table-condensed adminTable">
+            <tr>
+                <th style="width: 50%;">Title</th>
+                <th style="width: 50%;">Actions</th>
+            </tr>
+            <tr ng-repeat="articleTemplate in articleTemplates">
+                <td>{{articleTemplate.Title}}</td>
+                <td>
+                    <div class="btn-group btn-group" role="group" ng-if="checkArticleTemplatePermissions()">
+                        <a ui-sref="articleTemplates.form({articleTemplateId: articleTemplate.Id})" class="btn btn-xs btn-warning modalTrigger"><i class="fa fa-edit"></i> Edit</a>
+                        <a ng-click="deleteArticleTemplate(articleTemplate.Id);$event.stopPropagation();" class="btn btn-xs btn-danger modalTrigger"><i class="fa fa-times"></i> Delete</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <p ng-show="(!articleTemplates.length && loadComplete) && !pagination.searchTerm">There are currently no article templates in the database.</p>
+        <p ng-show="(!articleTemplates.length && loadComplete) && pagination.searchTerm">Your search produced 0 results.</p>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right" style="padding-right: 0;" ng-if="checkArticleTemplatePermissions()">
+            <button class="btn btn-primary" type="button" ng-click="addArticleTemplate()" ng-if="(user.SiteAdmin || user.LeadClinician) && loadComplete">Add a new article template</button>
+        </div>
+    </div>
+</div>

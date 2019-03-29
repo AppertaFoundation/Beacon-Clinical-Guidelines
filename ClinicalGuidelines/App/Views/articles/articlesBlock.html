@@ -1,0 +1,51 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div ui-tree-handle class="tree-node tree-node-content" style="padding:0;height:100%;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <md-card class="node-card" style="margin:0;" ng-class="blockEditedOnThisRevision(block)" >
+        <md-card-content layout="row" style="padding: 5px; cursor: default;" ng-if="block.template" data-nodrag>
+            <div flex="5">
+                <span class="btn btn-default" style="cursor: default;"><i class="{{getIcon(block.type)}}"></i></span>
+            </div>
+            <div flex="60">
+                {{block.input}} <span ng-if="block.url">{{block.url}}</span>
+            </div>
+            <div flex data-nodrag>
+                <div class="btn-group btn-group" role="group" style="float: right;">
+                    <i class="btn btn-default" style="cursor: default;">Add to section: </i>
+                    <a ng-click="addBlockToSection('text', blockKey);" class="btn btn-default" ng-disabled="(!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover && !user.ContentEditor) || articleFormLocked"><i class="fa fa-font"></i></a>
+                    <a ng-click="addBlockToSection('unordered', blockKey);" class="btn btn-default" ng-disabled="(!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover && !user.ContentEditor) || articleFormLocked"><i class="fa fa-list-ul"></i></a>
+                    <a ng-click="addBlockToSection('ordered', blockKey);" class="btn btn-default" ng-disabled="(!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover && !user.ContentEditor) || articleFormLocked"><i class="fa fa-list-ol"></i></a>
+                    <a ng-click="addBlockToSection('link', blockKey);" class="btn btn-default" ng-disabled="(!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover && !user.ContentEditor) || articleFormLocked"><i class="fa fa-link"></i></a>
+                    <a ng-click="addBlockToSection('table', blockKey);" class="btn btn-default" ng-disabled="(!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover && !user.ContentEditor) || articleFormLocked"><i class="fa fa-table"></i></a>                    
+                    <a ng-click="addBlockToSection('images', blockKey);" class="btn btn-default" ng-disabled="(!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover && !user.ContentEditor) || articleFormLocked"><i class="fa fa-image"></i></a>
+                </div>
+            </div>
+        </md-card-content>
+
+        <md-card-content layout="row" style="padding:5px;" ng-if="!block.template">
+            <div flex="5">
+                <span class="btn btn-default" data-nodrag ng-click="addEditBlock(block.type, block)"><i class="{{getIcon(block.type)}}"></i></span>
+            </div>
+            <div flex="80">
+                {{block.input}} <span ng-if="block.url">{{block.url}}</span>
+                <img ng-if="block.type == 'image'" ng-src="data:image/png;base64, {{block.image}}" style="height: 50px; border: 1px solid black;">
+            </div>
+            <div flex data-nodrag>
+                <div class="btn-group btn-group" role="group" style="float:right;">
+                    <span class="btn btn-{{(block.bold) ? 'success' : 'default'}}" ng-click="bold(block)" ng-if="block.type != 'table' && block.type != 'image'"><i class="fa fa-bold"></i></span>
+                    <span class="btn btn-{{(block.italic) ? 'success' : 'default'}}" ng-click="italic(block)" ng-if="block.type != 'table' && block.type != 'image'"><i class="fa fa-italic"></i></span>
+                    <span class="btn btn-default" ng-click="removeBlock(this)"><i class="fa fa-times"></i></span>
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+</div>
+<ol ui-tree-nodes="" ng-model="block.blocks">
+    <li ng-repeat="block in block.blocks" ui-tree-node ng-include="'App/Views/articles/articlesBlock.html'">
+    </li>
+</ol>

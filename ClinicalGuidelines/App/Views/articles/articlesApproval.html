@@ -1,0 +1,62 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div ng-init="paginateArticleApprovals()">
+    <h2>Article Approvals</h2>
+    <p>Below is a list of new articles or edits to articles that need approval before they become available in the beacon app.</p>
+    <p class="error-block-large">{{apiErrors}}</p>
+
+    <div>
+        <div ng-if="!articles.length">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left" style="padding-left: 0;">
+                <span ng-if="loadComplete">
+                    <input ng-model="pagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && pageChangedApprovals()" ng-blur="pageChangedApprovals()">
+                </span>
+            </div>
+        </div>
+
+        <div ng-if="articles.length">
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 text-left" style="padding-left: 0;">
+                <span ng-if="loadComplete">
+                    <input ng-model="pagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && pageChangedApprovals()" ng-blur="pageChangedApprovals()">
+                </span>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-4 col-xs-4 text-center">
+                <uib-pagination total-items="pagination.totalItems" items-per-page="pagination.pageSize" ng-model="pagination.currentPage" ng-change="pageChangedApprovals()"></uib-pagination>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 text-right" style="padding-right: 0;">
+                <select ng-model="pagination.pageSize"
+                        class="form-control"
+                        style="width: 185px; display: inline;"
+                        ng-options="pageSize.Id as pageSize.Name for pageSize in pageSizeOptions"
+                        ng-change="pageChangedApprovals()"></select>
+            </div>
+        </div>
+
+        <table ng-show="articles.length" class="table table-striped table-hover table-condensed adminTable">
+            <tr>
+                <th style="width: 25%;">Title</th>
+                <th style="width: 25%;">Department</th>
+                <th style="width: 25%;">Section</th>
+                <th style="width: 25%;">Actions</th>
+            </tr>
+            <tr ng-repeat="article in articles">
+                <td>{{article.Title}}</td>
+                <td><span ng-repeat="department in article.Departments">{{department.Name}}<span style="font-size: 0.8em;"> (within {{department.Container.ShortName}})</span>{{$last ? '' : ', '}}</span><br /></td>
+                <td>{{article.SubTitle}}</td>
+                <td>
+                    <div class="btn-group btn-group" role="group">
+                        <a ui-sref="articles.form({articleId: article.Id, revisionId: article.RevisionId})" class="btn btn-xs btn-warning modalTrigger" ng-if="(user.SiteAdmin || user.LeadClinician || user.ContentApprover || user.ContentEditor) && !article.Archived"><i class="fa fa-edit"></i> View and approve</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <p ng-show="((!articles.length && loadComplete) || apiErrors) && !pagination.searchTerm">There are currently no articles awaiting approval.</p>
+        <p ng-show="((!articles.length && loadComplete) || apiErrors) && pagination.searchTerm">Your search produced 0 results.</p>
+    </div>
+</div>

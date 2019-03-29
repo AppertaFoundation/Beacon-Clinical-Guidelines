@@ -1,0 +1,136 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<form name="form.user" novalidate>
+    <div ng-init="initialiseUserForm()">
+        <div class="row">
+            <!-- Search User -->
+            <div ng-show="searchUsers">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="form-group">
+                        <label>Search users</label>
+                        <div class="col-md-12 col-sm-12 no-padding">
+                            <input ng-keyup="$event.keyCode == 13 && getUsersByName(this.searchString)"
+                                   autocomplete="off" class="col-md-8 col-sm-8 form-control smaller" type="text" name="searchString" ng-model="searchString" ng-disabled="!checkUserPermissions()"/>
+                            <button class="btn btn-primary" type="button" ng-click="getUsersByName(this.searchString)" ng-disabled="!checkUserPermissions()">Search</button>
+                        </div>
+                        <p class="small help-block">Search firstname only or firstname and surname combined.</p>
+                    </div>
+
+                    <div class="form-group" ng-show="activeDirectoryUsers">
+                        <label>Select the user below</label>
+                        <select class="form-control" ng-model="selectedUser" ng-options="activeDirectoryUser.DisplayName for activeDirectoryUser in activeDirectoryUsers" ng-change="addUserToForm(selectedUser)"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Form -->
+            <div ng-show="!searchUsers">
+                <div class="form-group">
+                    <input ng-if="editingUser.Id" type="hidden" name="Id" class="form-control" ng-model="editingUser.Id">
+                    <input ng-if="editingUser._id" type="hidden" name="_id" class="form-control" ng-model="editingUser._id">
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <div class="col-md-12 col-sm-12 no-padding" style="margin-bottom: 15px;">
+                            <input type="text" name="SamAccountName" class="col-md-8 col-sm-8 form-control smaller" ng-model="editingUser.SamAccountName" ng-disabled="true">
+                            <button class="btn btn-primary" type="button" ng-click="toggleUserSearch(true)" ng-if="editingUser.Id == null">Change</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Forename</label>
+                        <input type="text" autocomplete="off" name="Forename" class="form-control" ng-model="editingUser.Forename" required ng-disabled="!checkUserPermissions()">
+                        <p ng-show="form.user.Forename.$invalid && !form.user.Forename.$pristine" class="error-block">Forename is required.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Surname</label>
+                        <input type="text" autocomplete="off" name="Surname" class="form-control" ng-model="editingUser.Surname" required ng-disabled="!checkUserPermissions()">
+                        <p ng-show="form.user.Surname.$invalid && !form.user.Surname.$pristine" class="error-block">Surname is required.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select ng-model="editingUser.DepartmentId" name="DepartmentId" class="form-control" ng-options="department.Id as department.Name for (key, department) in departments" required ng-disabled="!checkUserPermissions()">
+                            <option value="">No department selected</option>
+                        </select>
+                        <p ng-show="form.user.DepartmentId.$invalid" class="error-block">Department needs to be selected.</p>
+                    </div>                    
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="form-group">
+                        <label>Job Title</label>
+                        <input type="text" autocomplete="off" name="JobTitle" class="form-control" ng-model="editingUser.JobTitle" required ng-disabled="!checkUserPermissions()">
+                        <p ng-show="form.user.JobTitle.$invalid && !form.user.JobTitle.$pristine" class="error-block">Job Title is required.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" autocomplete="off" name="PhoneNumber" class="form-control" ng-model="editingUser.PhoneNumber" ng-disabled="!checkUserPermissions()">
+                        <p ng-show="form.user.PhoneNumber.$invalid" class="error-block">Please enter a valid phone number.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" autocomplete="off" name="EmailAddress" class="form-control" ng-model="editingUser.EmailAddress" ng-disabled="!checkUserPermissions()">
+                        <p ng-show="form.user.EmailAddress.$invalid" class="error-block">Please enter a valid email address.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>App Contact</label>
+                        <input type="checkbox" autocomplete="off" name="Contact" ng-model="editingUser.Contact" ng-disabled="!checkUserPermissions()">
+                        <p class="small">Makes user searchable within beacon mobile</p>
+                    </div>
+                </div>
+
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="width:90%" />
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        <label>Site Admin</label>
+                        <input type="checkbox" autocomplete="off" name="SiteAdmin" ng-model="editingUser.SiteAdmin" ng-disabled="!user.SiteAdmin">
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        <label>Lead Clinician</label>
+                        <input type="checkbox" autocomplete="off" name="LeadClinician" ng-model="editingUser.LeadClinician" ng-disabled="!checkUserPermissions()">
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        <label>Content Approver</label>
+                        <input type="checkbox" autocomplete="off" name="ContentApprover" ng-model="editingUser.ContentApprover" ng-disabled="!checkUserPermissions()">
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        <label>Content Editor</label>
+                        <input type="checkbox" autocomplete="off" name="ContentEditor" ng-model="editingUser.ContentEditor" ng-disabled="!checkUserPermissions()">
+                    </div>
+                </div>
+
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="width:90%" ng-if="user.Id && (user.SiteAdmin || user.ContentEditor || user.ContentApprover || user.LeadClinician)" />
+                
+                <div ng-if="user.Id && (user.SiteAdmin || user.ContentEditor || user.ContentApprover || user.LeadClinician)" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h4>Beacon Admin Responsible Area(s)</h4>
+                    <p>Users set as one of the (<i>Lead Clinician, Content Approver or Content Editor</i>) levels need to have areas assigned to them to be able to add/edit/approve content on the admin site, add these below.</p>
+
+                    <p ng-repeat="container in containers">
+                        <span ng-repeat="department in departments | filter: {ContainerId: container.Id}">
+                            <span ng-if="$first"><strong>{{container.Name}}</strong><br /></span>
+                            <input type="checkbox" ng-model="department.selectedAsAdmin"/> {{department.Name}}<span ng-if="!$last">, </span>
+                        </span>
+                    </p>
+                </div>                
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-if="checkUserPermissions()">
+                <p class="error-block" ng-if="apiErrors">{{apiErrors}}</p>
+                <button class="btn btn-primary" type="submit" ng-click="saveUser()" ng-disabled="form.user.$invalid || apiErrors">Save</button>
+                <button class="btn btn-warning" type="button" ui-sref="users.list">Back</button>
+            </div>
+        </div>
+    </div>
+</form>

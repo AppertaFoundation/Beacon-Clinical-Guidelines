@@ -1,0 +1,75 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div ng-init="paginateUsers()" ng-cloak>
+    <h2>User Administration</h2>
+    <p>Below is a list of current users associated with beacon. Users will be added to this list automatically however you can pre add in content authors here or edit users to become one.</p>
+    <p class="error-block-large">{{apiErrors}}</p>
+
+    <div ng-if="!users.length">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left" style="padding-left: 0;">
+            <span ng-if="loadComplete">
+                <input ng-model="pagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && pageChanged()" ng-blur="pageChanged()">
+            </span>
+        </div>
+    </div>
+
+    <div ng-if="users.length">
+        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 text-left" style="padding-left: 0;">
+            <span ng-if="loadComplete">
+                <input ng-model="pagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && pageChanged()" ng-blur="pageChanged()">
+            </span>
+        </div>
+        <div class="col-lg-8 col-md-8 col-sm-4 col-xs-4 text-center">
+            <uib-pagination total-items="pagination.totalItems" items-per-page="pagination.pageSize" ng-model="pagination.currentPage" ng-change="pageChanged()"></uib-pagination>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 text-right" style="padding-right: 0;">
+            <select ng-model="pagination.pageSize"
+                    class="form-control"
+                    style="width: 185px; display: inline;"
+                    ng-options="pageSize.Id as pageSize.Name for pageSize in pageSizeOptions"
+                    ng-change="pageChanged()"></select>
+        </div>
+    </div>
+
+    <table ng-show="users.length" class="table table-striped table-hover table-condensed userTable">
+        <tr>
+            <th style="width: 20%;">User</th>
+            <th style="width: 20%;">Job Title</th>
+            <th style="width: 20%;">Department</th>
+            <th class="centered" style="width: 5%;">Site Admin</th>
+            <th class="centered" style="width: 5%;">Clinical Lead</th>
+            <th class="centered" style="width: 5%;">Content Approval</th>
+            <th class="centered" style="width: 5%;">Content Editor</th>
+            <th class="centered" style="width: 5%;">App Contact</th>
+            <th style="width: 15%;">Actions</th>
+        </tr>
+        <tr ng-repeat="u in users">
+            <td>{{u.Forename}} {{u.Surname}}, {{u.SamAccountName}}</td>
+            <td>{{u.JobTitle}}</td>
+            <td>{{u.DepartmentName ? u.DepartmentName : 'No Department Selected'}}</td>
+            <td><i class="fa fa-{{u.SiteAdmin ? 'check' : 'close'}} tickCross" ng-style="{'color': (u.SiteAdmin ? '#85e085' : '#ff8566')}"></i></td>
+            <td><i class="fa fa-{{u.LeadClinician ? 'check' : 'close'}} tickCross" ng-style="{'color': (u.LeadClinician ? '#85e085' : '#ff8566')}"></i></td>
+            <td><i class="fa fa-{{u.ContentApprover ? 'check' : 'close'}} tickCross" ng-style="{'color': (u.ContentApprover ? '#85e085' : '#ff8566')}"></i></td>
+            <td><i class="fa fa-{{u.ContentEditor ? 'check' : 'close'}} tickCross" ng-style="{'color': (u.ContentEditor ? '#85e085' : '#ff8566')}"></i></td>
+            <td><i class="fa fa-{{u.Contact ? 'check' : 'close'}} tickCross" ng-style="{'color': (u.Contact ? '#85e085' : '#ff8566')}"></i></td>
+            <td>
+                <div class="btn-group btn-group" role="group" ng-if="(user.SiteAdmin || user.LeadClinician) && loadComplete">
+                    <a ui-sref="users.form({userId: u.Id})" class="btn btn-xs btn-warning modalTrigger" ng-if="!subSectionTab.Archived"><i class="fa fa-edit"></i> Edit</a>
+                    <a ng-click="deleteUser(u.Id);$event.stopPropagation();" class="btn btn-xs btn-danger modalTrigger"><i class="fa fa-times"></i> Delete</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <p ng-show="(!users.length && loadComplete) && !pagination.searchTerm">There are currently no users in the database.</p>
+    <p ng-show="(!users.length && loadComplete) && pagination.searchTerm">Your search produced 0 results.</p>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right" style="padding-right: 0;" ng-if="(user.SiteAdmin || user.LeadClinician) && loadComplete">
+        <button class="btn btn-primary" type="button" ng-click="addUser()" ng-if="(user.SiteAdmin || user.LeadClinician) && loadComplete">Add a new user</button>
+    </div>
+</div>

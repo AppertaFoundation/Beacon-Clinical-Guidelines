@@ -1,0 +1,564 @@
+//Beacon Clinical Guidelines
+//Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+//
+//You should have received a copy of the GNU Affero General Public License
+//along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+// 
+// See LICENSE in the project root for license information.
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 0;
+}
+
+#loading-bar .bar {
+    top: 50px;
+    height: 12px;
+    background: #FF6F00;
+}
+
+#loading-bar-spinner {
+    top:5px;
+    width:100%;
+}
+
+#loading-bar-spinner .spinner-icon {
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    right: 20px;
+    left: unset;
+    border: 8px solid transparent;
+    border-top-color: #FF6F00;
+    border-left-color: #FF6F00;
+}
+
+.webView .md-chips .md-chip {
+    height: 18px !important; 
+    line-height: 15px !important;  
+    margin: 2px !important;  
+    padding: 2px 5px 2px 5px !important;  
+    font-size: 14px !important;
+}
+
+.webView .md-chip {
+    background: #00bfff !important;
+}
+
+.webView .md-chips {
+    font-size: 14px !important;
+    box-shadow: 0 0 #fff !important;
+}
+
+.webView md-chip-template {
+    color: #fff;
+    padding-right: 0 !important;
+    text-transform: lowercase;
+}
+
+body {
+    padding-top: 50px;
+}
+#mobilePreviewArea {
+    top: 0 !important;
+    position: relative !important;
+}
+
+ul.dropdown-menu a {
+    color: #000 !important;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+input.smaller,
+select.smaller,
+textarea.smaller {
+    max-width: 200px;
+}
+
+input.fullwidth,
+select.fullwidth,
+textarea.fullwidth {
+    max-width: 100%;
+}
+
+textarea.halfheight {
+    height: 100px;
+}
+
+textarea.fullheight {
+    height: 200px;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+table.userTable th {
+    width: 12.5%;
+}
+table.userTable th.centered {
+    text-align:center;
+}
+table.userTable .tickCross {
+    width: 100%;
+    text-align:center;
+    vertical-align: middle; 
+    line-height: 40px;
+}
+table.userTable td {
+    vertical-align: middle !important; 
+    line-height: 40px;
+}
+
+.help-block {
+    color: #808080;
+    font-size: x-small;
+}
+
+.error-block {
+    color: #ff8566;
+    font-size: x-small;
+}
+
+.error-block-large {
+    color: #ff8566;
+    font-size: large;
+}
+
+.breadCrumbLocation {
+    padding: 1px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.webArticleContainer h2, 
+.mobilePreviewContainer h2 {
+    font-size: 1.2em;
+}
+
+.webArticleContainer h3,
+.mobilePreviewContainer h3 {
+    font-size: 1.1em;
+}
+
+.webArticleContainer p,
+.mobilePreviewContainer p {
+    line-height: 1.4;
+    margin-bottom: 5px;
+}
+
+.webArticleContainer ul,
+.mobilePreviewContainer ul {
+    margin-left:0; /* Remove the default left margin */
+    padding-left:0; /* Remove the default left padding */
+}
+
+.webArticleContainer ul > li,
+.mobilePreviewContainer ul > li {
+    position:relative; /* Create a positioning context */
+    margin:0 0 6px 0; /* Give each list item a left margin to make room for the numbers */
+    padding:4px 8px; /* Add some spacing around the content */
+    list-style:none; /* Disable the normal item numbering */
+    border-top:2px solid #666;
+    background:#f6f6f6;
+}
+
+.webArticleContainer ol,
+.mobilePreviewContainer ol {
+    counter-reset:li; /* Initiate a counter */
+    margin-left:0; /* Remove the default left margin */
+    padding-left:0; /* Remove the default left padding */
+}
+
+.webArticleContainer ol > li,
+.mobilePreviewContainer ol > li {
+    position:relative; /* Create a positioning context */
+    margin:0 0 6px 2em; /* Give each list item a left margin to make room for the numbers */
+    padding:4px 8px; /* Add some spacing around the content */
+    list-style:none; /* Disable the normal item numbering */
+    border-top:2px solid #666;
+    background:#f6f6f6;
+}
+
+.webArticleContainer ul,
+.mobilePreviewContainer ul {
+    list-style:none; /* Disable the normal item numbering */
+}
+
+.webArticleContainer ol > li:before,
+.mobilePreviewContainer ol > li:before {
+    content:counter(li); /* Use the counter as content */
+    counter-increment:li; /* Increment the counter by 1 */
+    /* Position and style the number */
+    position:absolute;
+    top:-2px;
+    left:-2em;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
+    width:2em;
+    /* Some space between the number and the content in browsers that support
+        generated content but not positioning it (Camino 2 is one example) */
+    margin-right:8px;
+    padding:4px;
+    border-top:2px solid #666;
+    color:#fff;
+    background:#666;
+    font-weight:bold;
+    font-family:"Helvetica Neue", Arial, sans-serif;
+    text-align:center;
+}
+
+.webArticleContainer ol > li > p:first-child,
+.mobilePreviewContainer ol > li > p:first-child {
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.webArticleContainer ol > li > p:not(:first-child), .webArticleContainer ol > li > ul,
+.mobilePreviewContainer ol > li > p:not(:first-child), .mobilePreviewContainer ol > li > ul {
+    /*margin-left: -40px;*/
+    margin-top: 10px;
+    padding-left: 5px;
+    width: 100%;
+}
+
+.webArticleContainer ol > li > ul > li > p:not(:first-child),
+.mobilePreviewContainer ol > li > ul > li > p:not(:first-child) {
+    /*margin-left: -10px;*/
+    margin-top: 10px;
+    padding-left: 5px;
+    width: 100%;
+}
+
+.webArticleContainer ol > li a,
+.mobilePreviewContainer ol > li a {
+    margin-top: 10px;
+}
+
+.webArticleContainer li ol,
+.webArticleContainer li ul,
+.mobilePreviewContainer li ol,
+.mobilePreviewContainer li ul {margin-top:0;}
+
+.webArticleContainer ol ol li:last-child,
+.mobilePreviewContainer ol ol li:last-child {margin-bottom:0;}
+
+.webArticleContainer ul,
+.mobilePreviewContainer ul {
+    margin: 0;
+}
+
+.webArticleContainer p > strong,
+.mobilePreviewContainer p > strong {
+        color: #fff;
+        width: 100%;
+        display: block;
+        padding: 5px;
+        text-transform: uppercase;
+}
+
+.webArticleContainer > p,
+.mobilePreviewContainer > p {
+    display: block;
+    width: 100%;
+}
+
+.webArticleContainer p > a,
+.mobilePreviewContainer p > a {
+    font-weight: normal;
+    display: block;
+    white-space: normal;
+    background: grey;
+}
+
+.webArticleContainer p > a:hover,
+.mobilePreviewContainer p > a:hover {
+    font-weight: bold;
+    border: 2px solid grey;
+    background: grey;
+}
+
+.webArticleContainer ul > li > ul *,
+.mobilePreviewContainer ul > li > ul *  {
+    margin: 0;
+    margin-left: 5px;
+    padding: 0;
+}
+
+.webArticleContainer ol > li > p > strong,
+.mobilePreviewContainer ol > li > p > strong {
+    margin-left: 0;
+}
+
+.webArticleContainer ol > li > p,
+.mobilePreviewContainer ol > li > p {
+    padding-left: 0 !important;
+}
+
+.webArticleContainer ol > li > ul,
+.mobilePreviewContainer ol > li > ul {
+    padding: 0;
+}
+
+.webArticleContainer ol > li > ul li,
+.mobilePreviewContainer ol > li > ul li {
+    border-top: 1px solid #fff !important;
+    background: #fff !important;
+}
+
+.webArticleContainer table,
+.mobilePreviewContainer table {
+	width: 100%;
+    border-spacing: 2px;
+    border-collapse: separate;
+}
+
+.webArticleContainer th,
+.mobilePreviewContainer th {
+	text-align: left;
+    background: grey;
+    padding: 2px;
+    margin: 2px;
+    color: #fff;
+    padding-left: 5px;
+    text-transform: uppercase;
+} 
+
+.webArticleContainer td,
+.mobilePreviewContainer td {
+	text-align: left;
+    background: grey;
+    padding: 2px;
+    margin: 2px;
+    color: #000;
+    padding-left: 5px;
+}  
+
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    height: 100px;
+    text-align: center;
+    padding-top: 25px;
+    margin: 10px;
+}
+
+.dragover {
+    border: 5px dashed blue;
+}
+
+div.colorPicker span {
+    line-height: 10px !important;
+}
+
+div.colorPicker p.small {
+    font-size: xx-small !important;
+    line-height: 10px !important;
+}
+
+/** MD-COLOR-MENU **/
+
+md-menu-content.md-cm {
+    padding: 0;
+    max-height: none;
+    overflow: visible;
+}
+
+md-menu-content.md-cm .md-cm-swatches {
+    cursor: pointer;
+}
+
+md-menu-content.md-cm .md-cm-color {
+    width: 32px;
+    min-height: 32px;
+}
+
+md-menu-content.md-cm .md-cm-color:focus {
+    outline: none;
+}
+
+.angular-ui-tree-empty {
+    display: none;
+}
+
+.angular-ui-tree-handle {
+    background: #f8faff;
+    border: 1px solid #dae2ea;
+    color: #7c9eb2;
+    padding: 10px 10px;
+}
+
+.angular-ui-tree-handle:hover {
+    color: #438eb9;
+    background: #f4f6f7;
+    border-color: #dce2e8;
+}
+
+.angular-ui-tree-placeholder {
+    background: #f0f9ff;
+    border: 2px dashed #bed2db;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.md-chip {
+    position: relative; 
+}
+
+.md-chip .md-chip-remove-container {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    margin-right: 4px;
+    height: 24px; 
+}
+
+button.termchip {
+    position: relative;
+    height: 24px;
+    width: 24px;
+    line-height: 30px;
+    text-align: center;
+    background: #000000;
+    background: rgba(0, 0, 0, 0.3);
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    border: none;
+    -webkit-box-shadow: none;
+    -ms-box-shadow: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    -webkit-transition: background 0.15s linear;
+    -moz-transition: background 0.15s linear;
+    -ms-transition: background 0.15s linear;
+    -o-transition: background 0.15s linear;
+    transition: background 0.15s linear;
+    display: block;
+}
+
+button.termchip md-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate3d(-50%, -50%, 0) scale(0.7);
+    -moz-transform: translate3d(-50%, -50%, 0) scale(0.7);
+    -ms-transform: translate3d(-50%, -50%, 0) scale(0.7);
+    -o-transform: translate3d(-50%, -50%, 0) scale(0.7);
+    transform: translate3d(-50%, -50%, 0) scale(0.7);
+    color: white;
+    fill: white;
+}
+
+button.termchip:hover, button.vegetablechip:focus {
+    background: #ff0000;
+    background: rgba(255, 0, 0, 0.8);
+}
+
+md-chip-template {
+    padding-right: 5px; 
+}
+
+.DEBUG {
+    background-color: #4DB6AC;
+    border-color: #4DB6AC;
+}
+
+.TEST {
+    background-color: #4DB6AC;
+    border-color: #4DB6AC;
+}
+
+.UAT {
+    background-color: #7E57C2;
+    border-color: #7E57C2;
+}
+
+.LIVE {
+    background-color: #64B5F6;
+    border-color: #64B5F6;
+}
+
+.UNKNOWN {
+    background-color: #EF5350;
+    border-color: #EF5350;
+}
+
+.DEBUG a, .DEBUG p, .TEST a, .TEST p, .UAT a, .UAT p, .LIVE a, .LIVE p, .UNKNOWN a, .UNKNOWN p {
+    color: #ffffff !important;
+}
+
+.DEBUG p, .TEST p, .UAT p, .LIVE p, .UNKNOWN p {
+    font-size: 2.2em;
+}
+
+ul.pagination {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+table.adminTable {
+    margin-bottom: 15px;
+}
+
+h4.expired {
+    position: relative; /* Helps us control overlap */
+    padding-left: 25px; /* Creates space for the Phone Icon */
+}
+
+h4.expired:after {
+    content: '\f071';
+    font-family: fontAwesome;
+    position: absolute;
+    color: red;
+    left: 0; /* Adjust as needed */
+    top: 0; /* Adjust as needed */
+}
+
+h4.expirying {
+    position: relative; /* Helps us control overlap */
+    padding-left: 25px; /* Creates space for the Phone Icon */
+}
+
+h4.expirying:after {
+    content: '\f06a';
+    font-family: fontAwesome;
+    position: absolute;
+    color: orange;
+    left: 0; /* Adjust as needed */
+    top: 0; /* Adjust as needed */
+}
+
+.fa-td {
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+}
+
+md-radio-button {
+    outline: none;
+}
+
+.block-edited {
+    border: #E91E63 solid 2px;
+}

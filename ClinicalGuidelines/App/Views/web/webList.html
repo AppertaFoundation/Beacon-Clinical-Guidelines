@@ -1,0 +1,265 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div id="webList" ng-init="initialiseWeb()" class="webView">
+    <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12" style="padding-left: 0; padding-right: 0;">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-if="!containerId && departmentContainers.length > 0" style="padding-left: 0; padding-right: 0;">
+            
+            <div layout="row" style="margin-top: 20px; margin-right: 5px; margin-bottom: 0;" ng-if="department" ng-click="displayDepartmentContactsFromDepartment()">
+                <span flex="15">
+                    <span layout="row">
+                        <i style="font-size: 2.0em; padding-left: 10px;" class="ion-ios-people"></i>
+                    </span>
+                </span>
+                <p flex="85" style="text-transform: uppercase; margin-bottom: 0; padding-top: 10px;">{{department.Name + ' Contacts'}}</p>
+            </div>
+
+            <h3>Choose Area</h3>
+            <md-content>
+                <md-card ng-repeat="container in departmentContainers" ng-style="{ 'border-left': (container.MainColour) ? '11px solid ' + container.MainColour : ''}" ng-click="goTo(container.Id, null, null, null)">
+                    <md-card-content>
+                        <p style="text-transform: uppercase;">{{container.Name}}</p>
+                    </md-card-content>
+                </md-card>
+            </md-content>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-if="containerId && !departmentId && departments.length > 0" style="padding-left: 0; padding-right: 0;">
+            
+            <div layout="row" style="margin-top: 20px; margin-right: 10px; margin-bottom: 0;" ng-click="displayDepartmentContactsFromContainer()">
+                <span flex="15">
+                    <span layout="row">
+                        <i style="font-size: 2.0em; padding-left: 10px;" class="ion-ios-people"></i>
+                    </span>
+                </span>
+                <p flex="85" style="text-transform: uppercase; margin-bottom: 0; padding-top: 10px;">{{container.Name + ' Contacts'}}</p>
+            </div>  
+
+            <h3>Choose Department</h3>
+            <md-content>
+                <md-card ng-click="goTo(null, null, null, null)" style="margin-left: 0; border-left: 10px solid #757575;">
+                    <md-card-content>
+                        <p style="text-transform: uppercase;">Back to view all areas</p>
+                    </md-card-content>
+                </md-card>
+                <md-card ng-repeat="department in filteredDepartments = (departments | filter:{ ContainerId: containerId })" ng-style="{ 'border-left': (department.MainColour) ? '10px solid ' + department.MainColour : ''}" style="margin-left: 0;" ng-click="goTo(containerId, department.Id, null, null)">
+                    <md-card-content>
+                        <p style="text-transform: uppercase;">{{department.Name}}</p>
+                    </md-card-content>
+                </md-card>
+            </md-content>
+        </div>
+        
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-if="departmentId && subSectionTabs.length > 0" style="padding-left: 0; padding-right: 0;">
+            
+            <div layout="row" style="margin-top: 20px; margin-right: 5px; margin-bottom: 0;" ng-click="displayDepartmentContactsFromDepartment()">
+                <span flex="15">
+                    <span layout="row">
+                        <i style="font-size: 2.0em; padding-left: 10px;" class="ion-ios-people"></i>
+                    </span>
+                </span>
+                <p flex="85" style="text-transform: uppercase; margin-bottom: 0; padding-top: 10px;">{{department.Name + ' Contacts'}}</p>
+            </div>
+
+            <h3>Choose Section</h3>
+            <md-content>
+                <md-card ng-click="goTo(null, null, null, null)" style="margin-left: 0; border-left: 10px solid #757575;">
+                    <md-card-content>
+                        <p style="text-transform: uppercase;">Back to view all areas</p>
+                    </md-card-content>
+                </md-card>
+                <md-card ng-click="goTo(containerId, null, null, null)" style="margin-left: 0; border-left: 10px solid #757575;">
+                    <md-card-content>
+                        <p style="text-transform: uppercase;">Back to {{container.Name}}</p>
+                    </md-card-content>
+                </md-card>
+                <md-card ng-if="articleId && subSectionTabId" ng-click="goTo(containerId, departmentId, subSectionTabId, null)" style="margin-left:0; border-left: 10px solid #757575;">
+                    <md-card-content>
+                        <p style="text-transform: uppercase;">Back to {{subSectionTab.Name}}</p>
+                    </md-card-content>
+                </md-card>
+                <md-card ng-click="goTo(containerId, departmentId, null, null)" ng-style="{ 'border-left': (department.MainColour) ? '10px solid ' + department.MainColour : ''}" style="margin-left:0;">
+                    <md-card-content>
+                        <p style="text-transform: uppercase;">All sections</p>
+                    </md-card-content>
+                </md-card>
+                <md-card ng-repeat="subSectionTab in subSectionTabs" ng-style="{ 'border-left': (department.MainColour) ? '10px solid ' + department.MainColour : ''}" style="margin-left:0;" ng-click="goTo(containerId, departmentId, subSectionTab.Id, null)">
+                    <md-card-content>
+                        <div layout="row">
+                            <p flex="80" style="text-transform: uppercase; margin-bottom: 0;">{{subSectionTab.Name}}</p>
+                            <span flex="20">
+                                <span layout="row" layout-align="end center">
+                                    <i style="font-size: 1.5em; line-height: 15px;" class="{{subSectionTab.Icon}}"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </md-card-content>
+                </md-card>
+            </md-content>
+        </div>
+    </div>
+    
+    <div class="col-lg-10 col-md-8 col-sm-12 col-xs-12">
+        <div ng-if="!articleId">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 0; padding-right: 0;">
+                <h3 style="text-transform: capitalize; margin-left: 8px;">
+                    <span ng-if="pagination.searchTerm">Search Results</span>
+                    <span ng-if="!pagination.searchTerm">
+                        <!--<span ng-if="!containerId && !departmentId">
+                            Latest articles
+                        </span>-->
+                        <span ng-if="containerId && !departmentId">
+                            Latest articles within {{container.Name}}
+                        </span>
+                        <span ng-if="containerId && departmentId">
+                            {{department.Name}} - <span ng-if="subSectionTabId">{{subSectionTab.Name}} Articles</span><span ng-if="!subSectionTabId">All Articles</span>
+                        </span>                        
+                    </span>
+                </h3>
+                <md-content>
+                    <md-card ng-repeat="article in filteredArticles = (articles | filter: subSectionTabId && { SubSectionTabId: subSectionTabId })" ng-style="{ 'background-color': getArticleBackgroundColour(article.Departments[0].Id) }" ng-click="goTo(containerId, departmentId, subSectionTabId, article.Id)">
+                        <md-card-content>
+                            <div layout="row">
+                                <p flex="95" style="text-transform: uppercase; margin-bottom: 0;">{{article.Title}} <span style="text-transform:lowercase;" ng-if="!containerId || !departmentId"><br />{{getArticleAreaDetails(article)}} - last edited {{article.RevisionDateTime | date}}</span></p>
+                                <span flex="5" ng-if="!subSectionTabId">
+                                    <span layout="row" layout-align="end center">
+                                        <i style="font-size: 1.5em; line-height: 15px;" class="{{getSubSectionTabIcon(article.SubSectionTabId)}}"></i>
+                                    </span>
+                                </span>
+                            </div>
+                            <div layout="row">
+                                <div ng-if="articleExpired(article.ExpiryDateTime)">
+                                    <h4 ng-model="article.ExpiryDateTime" style="color: red;" class="expired">Expired on: {{ article.ExpiryDateTime | formatDateFunction }}</h4>
+                                </div>
+                                <div ng-if="articleExpiring(article.ExpiryDateTime)">
+                                    <h4 ng-model="article.ExpiryDateTime" class="expirying">Expires on: {{ article.ExpiryDateTime | formatDateFunction }}</h4>
+                                </div>
+                            </div>
+                        </md-card-content>
+                    </md-card>
+                </md-content>
+            </div>
+
+            <div ng-if="filteredArticles.length">
+                <div class="col-lg-4 col-md-4 col-sm-5 col-xs-4 text-left" style="padding-left: 0; padding-right: 0;"></div>
+
+                <div class="col-lg-4 col-md-4 col-sm-5 col-xs-4 text-center">
+                    <uib-pagination total-items="pagination.totalItems" items-per-page="pagination.pageSize" max-size="5" ng-model="pagination.currentPage" ng-change="pageChanged()" boundary-links="true"></uib-pagination>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-2 col-xs-4 text-right" style="padding-right: 0;"></div>
+            </div>
+
+            <p ng-if="!filteredArticles.length && loadArticlesComplete && !pagination.searchTerm && containerId">There are currently no articles in this department area.</p>
+            <p ng-if="!filteredArticles.length && loadArticlesComplete && pagination.searchTerm">Your search produced 0 results.</p>
+        </div>
+        
+        <div ng-if="articleId">
+            <style parse-style>
+                .webArticleContainer p > strong {
+                    background: {{department.MainColour}};
+                }
+                .webArticleContainer p > a {
+                    border: 2px solid {{department.MainColour}};
+                    background: {{department.BackgroundColour}};
+                }
+                .webArticleContainer p > a:hover {
+                    border: 2px solid {{department.MainColour}};
+                    background: {{department.BackgroundColour}};
+                }
+                .webArticleContainer ol > li:before {
+                    border-top: 2px solid {{department.MainColour}} !important;
+                    background: {{department.MainColour}} !important;
+                }
+                .webArticleContainer ol > li {
+                    border-top: 2px solid {{department.MainColour}} !important;
+                    background: {{department.BackgroundColour}};
+                }
+                .webArticleContainer ol > li > ul > li {
+                    border-left: 4px solid {{department.MainColour}} !important;
+                   border-top: 1px solid {{department.MainColour}} !important;
+                }
+                .webArticleContainer ul > li {
+                    border-top: 2px solid {{department.BackgroundColour}} !important;
+                    background: {{department.BackgroundColour}} !important;
+                }
+                .webArticleContainer th {
+                    background: {{department.MainColour}} !important;
+                } 
+                .webArticleContainer td {
+                    background: {{department.BackgroundColour}} !important;
+                }  
+            </style>
+            
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 0; padding-right: 0; background-color: white">
+                <div ng-if="applyExpiredClassToArticleExpiryDate() === 'expired'">
+                    <h4 ng-model="article.ExpiryDateTime" style="color: red;" ng-class="applyExpiredClassToArticleExpiryDate()">Expired on: {{ article.ExpiryDateTime | formatDateFunction }}</h4>
+                </div>
+                <div ng-if="applyExpiredClassToArticleExpiryDate() !== 'expired'">
+                    <h4 ng-model="article.ExpiryDateTime" ng-class="applyExpiredClassToArticleExpiryDate()">Expires on: {{ article.ExpiryDateTime | formatDateFunction }}</h4>
+                </div>
+
+                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="padding-left: 0; padding-right: 0; background-color: white">
+                    <h3 style="text-transform: capitalize; margin-left: 0;">{{article.Title}}</h3>
+
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                    <div ng-click="showDisclaimer()" style="width: 65px">
+                        <i class="icon ion-information-circled" style="font-size: 2.5em;"></i>
+                    </div>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                    <div ng-click="shareViaEmail()" style="width: 65px">
+                        <i class="icon ion-android-desktop" style="font-size: 2.5em;"></i>
+                        <i class="icon ion-ios-email-outline" style="font-size: 2.5em;"></i>
+                    </div>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                    <div ng-click="viewEmailDetailsForCopying()" style="width: 65px">
+                        <i class="icon ion-clipboard" style="font-size: 2.5em;"></i>
+                        <i class="icon ion-ios-email-outline" style="font-size: 2.5em;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="articleViewingArea" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 0; padding-right: 0;">
+
+                <div class="webArticleContainer" ng-bind-html="processedBody | getFullImageAndHrefToJs"></div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <uib-carousel ng-if="article.images && article.ShowGallery" no-wrap="noWrapSlides">
+                        <uib-slide ng-repeat="image in article.images track by image.PreviewId" index="image.PreviewId">
+                            <img ng-src="data:image/png;base64, {{image.image}}" style="margin: auto;" ng-click="downloadFullImage(image)">
+                        </uib-slide>
+                    </uib-carousel>
+                </div>
+
+                <h3 style="text-transform: capitalize; margin-left: 0;" ng-if="article.RelatedArticleDtos.length != 0">Related Content</h3>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <md-card ng-repeat="(relatedArticleKey, relatedArticleValues) in article.RelatedArticleDtos | groupBy: 'Name'">
+                        <md-card-content ng-style="{
+                                    'background-color': relatedArticleValues[0].Departments[0].BackgroundColour,
+                                    'color': '#000'
+                                }"
+                                            ng-click="goTo(relatedArticleValues[0].Departments[0].ContainerId, relatedArticleValues[0].Departments[0].Id, relatedArticleValues[0].SubSectionTabId, relatedArticleValues[0].Id)">
+                            <h4>{{ relatedArticleValues[0].Name}}</h4>
+                            <h5>{{ 'Department: ' + relatedArticleValues[0].Departments[0].Name}}</h5>
+                            <h5>
+                                Related keyword(s):
+                                <span ng-repeat="term in relatedArticleValues | orderBy: ['Name']">
+                                    {{ term.Term.Name }}{{ $last ? '' : ',' }}
+                                </span>
+                            </h5>
+
+                        </md-card-content>
+                    </md-card>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

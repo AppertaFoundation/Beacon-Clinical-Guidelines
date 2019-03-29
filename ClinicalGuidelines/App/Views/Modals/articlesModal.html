@@ -1,0 +1,77 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div class="modal-header">
+    <h3 class="modal-title">{{article.Id ? 'Edit this' : 'Add a'}} article</h3>
+</div>
+<form name="form.article" novalidate>
+    <div class="modal-body" ng-init="initialiseArticlesForm()">
+        <div class="row margin-bottom-15">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    <input ng-if="article.Id" type="hidden" name="Id" class="form-control" ng-model="article.Id">
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" autocomplete="off" name="Title" class="form-control" ng-model="article.Title" required>
+                        <p ng-show="form.article.Title.$invalid && !form.article.Title.$pristine" class="error-block">Article title is required.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select ng-model="article.DepartmentId"
+                                class="form-control"
+                                ng-disabled="article.Id"
+                                ng-options="department.Id as department.ShortName for department in departments"
+                                ng-change="loadDepartmentSubSectionTabs()"></select>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <!-- Below is dynamic form content which is based on the template used -->
+                    <div class="form-group">
+                        <label>Template</label>
+                        <select ng-model="article.Body.TemplateId"
+                                class="form-control"
+                                ng-disabled="article.Id"
+                                ng-options="template.Id as template.Name for template in templates"
+                                ng-change="loadArticleTemplateItems()"></select>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="form-group">
+                        <label>Sub Section</label>
+                        <select ng-model="article.SubSectionTabId"
+                                class="form-control"
+                                ng-options="subSectionTab.Id as subSectionTab.Name for subSectionTab in subSectionTabs"></select>
+                    </div>
+                </div>
+                
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div>
+                        <div ng-repeat="templateItem in article.Body.TemplateItems | orderBy:'SortOrder'">
+                            <div class="form-group">
+                                <label>{{templateItem.BlockType}}</label>
+                                <textarea ng-model="templateItem.Body" class="form-control fullwidth fullheight"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="error-block" ng-if="apiErrors">{{apiErrors}}</p>
+            <button class="btn btn-primary" type="submit" ng-click="saveModel('Article')" ng-disabled="form.article.$invalid || apiErrors">{{article.Id ? 'Edit' : 'Add'}}</button>
+            <button class="btn btn-warning" type="button" ng-click="closeModal()">Close</button>
+        </div>
+    </div>
+</form>

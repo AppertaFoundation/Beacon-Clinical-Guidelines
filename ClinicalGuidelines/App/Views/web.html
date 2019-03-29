@@ -1,0 +1,49 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div ng-cloak ng-controller="webCtrl" ng-init="initialiseWeb()" id="webCtrl" >
+    <div ui-view></div>
+
+    <div ng-if="debug">
+        <h3>Data Bindings</h3>
+        
+        <div class="col-lg-12">
+            <p>DepartmentId: </p>
+            <pre class="code">{{departmentId | json}}</pre>
+        </div>
+
+        <div class="col-lg-12">
+            <p>Department: </p>
+            <pre class="code">{{department | json}}</pre>
+        </div>
+        
+        <div class="col-lg-12">
+            <p>ContainerId: </p>
+            <pre class="code">{{containerId | json}}</pre>
+        </div>
+        
+        <div class="col-lg-12">
+            <p>Department Containers: </p>
+            <pre class="code">{{departmentContainers | json}}</pre>
+        </div>
+
+        <div class="col-lg-12">
+            <p>Departments: </p>
+            <pre class="code">{{departments | json}}</pre>
+        </div>
+
+        <div class="col-lg-12">
+            <p>Article: </p>
+            <pre class="code">{{article | json}}</pre>
+        </div>
+
+        <div class="col-lg-12">
+            <p>Articles: </p>
+            <pre class="code">{{articles | json}}</pre>
+        </div>
+    </div>
+</div>

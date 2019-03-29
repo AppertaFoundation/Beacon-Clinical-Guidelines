@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Beacon Administration</title>
+    <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48 64x64" type="image/vnd.microsoft.icon">
+    @Styles.Render("~/css")
+    @Scripts.Render("~/bundles/angular")
+</head>
+<body ng-app="app" ng-controller="appCtrl" ng-cloak ng-class="(!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover && !user.ContentEditor) ? 'webView' : '' ;">
+    <div class="navbar navbar-inverse navbar-fixed-top" ng-class="headerType">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <p ng-if="headerType && headerType !== 'LIVE'" class="navbar-brand" style="margin: 0;">{{headerType}}</p>
+                <img src="~/Images/beacon-icon-transparent.png" style="float: left; margin-right: 10px;"/> 
+                <a class="navbar-brand" ui-sref="web.list">
+                    Beacon 
+                    <span ng-if="user.SiteAdmin || user.LeadClinician || user.ContentApprover || user.ContentEditor">Administration</span>
+                    <span ng-if="!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover && !user.ContentEditor">Clinical Guidelines</span>
+                </a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav" ng-if="user.SiteAdmin || user.LeadClinician || user.ContentApprover || user.ContentEditor">
+                    <span uib-dropdown>
+                        <li><a href id="simple-dropdown" uib-dropdown-toggle style="display: block; padding: 10px 15px; position: relative; padding-top: 15px; padding-bottom: 15px;">
+                                Main Menu
+                            </a></li>
+                        <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+                            <li><a ui-sref="users.list" ng-if="user.SiteAdmin || user.LeadClinician">Users</a></li>
+                            <li><a ui-sref="departments.list" ng-if="user.SiteAdmin || user.LeadClinician">Departments</a></li>
+                            <li><a ui-sref="staticphonenumbers" ng-if="user.SiteAdmin || user.LeadClinician">Department Static Numbers</a></li>
+                            <li><a ui-sref="subSectionTabs.list" ng-if="user.SiteAdmin || user.LeadClinician">Department Sections</a></li>
+                            <li><a ui-sref="articles.list" ng-if="user.SiteAdmin || user.LeadClinician || user.ContentApprover || user.ContentEditor">Create/Edit Articles</a></li>
+                            <li><a ui-sref="web.list" ng-if="user.SiteAdmin || user.LeadClinician || user.ContentApprover || user.ContentEditor">Browse Articles</a></li>
+                            <li><a ui-sref="articles.approvals" ng-if="user.SiteAdmin || user.LeadClinician || user.ContentApprover">Article Approvals</a></li>
+                            <li><a ui-sref="articleTemplates.list" ng-if="user.SiteAdmin || user.LeadClinician">Article Templates</a></li>
+                        </ul>
+                    </span>
+                </ul>
+                <ul class="nav navbar-nav pull-right">
+                    <li style="padding: 12px 5px;" ng-if="isWebView()">
+                        <input type="text" id="webSearch" name="webSearch" placeholder="Search articles..." ng-keyup="$event.keyCode == 13 && webViewSearch()" ng-blur="webViewSearch()" ng-model="webViewSearching.Text" />
+                    </li>
+                    <li ng-if="user"><a href="#">Welcome: {{user.SamAccountName}}</a></li>
+                    <li ng-if="!user"><a href="#">Welcome: Unrecognised user</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid body-content">
+        <iframe ng-src="{{reloadAuthSrc}}" ng-hide="true" class="frame" id="iframe"></iframe>
+        @RenderBody()
+        <div class="footerContainer col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-if="user.SiteAdmin || user.LeadClinician || user.ContentApprover || user.ContentEditor">
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - Beacon Admin | 
+                    <a href="~/Documents/Beacon-Admin-Help-Guide.pdf" target="_blank">Beacon Admin Guidance Notes</a> |
+                    <a href="~/Documents/Beacon-App-Help-Guide.pdf" target="_blank">Beacon App Guidance Notes</a> </p>
+            </footer>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/tools")
+    @Scripts.Render("~/bundles/app")
+</body>
+</html>

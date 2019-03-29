@@ -1,0 +1,45 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<form name="form.subSectionTab" novalidate>
+    <div ng-init="initialiseSubSectionTabsForm()">
+        <div class="row">
+            <div class="form-group">
+                <input ng-if="subSectionTab.Id" type="hidden" name="Id" class="form-control" ng-model="subSectionTab.Id">
+                <input ng-if="subSectionTab._id" type="hidden" name="_id" class="form-control" ng-model="subSectionTab._id">
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" autocomplete="off" name="Name" class="form-control" ng-model="subSectionTab.Name" ng-disabled="!checkSubSectionPermissions()" required>
+                    <p ng-show="form.subSectionTab.Name.$invalid && !form.subSectionTab.Name.$pristine" class="error-block">Sub section name is required.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    <label>Icon</label>
+                    <button class="btn btn-lg btn-default" data-iconset="ionicon" data-icon="ion-ionic" role="iconpicker" id="Icon" ng-disabled="!checkSubSectionPermissions()"></button>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    <label>Current State<span ng-if="!subSectionTab.Live">, making this department section live will make it available in the beacon app when saved</span></label>
+                    <md-switch ng-model="subSectionTab.Live" ng-disabled="!checkSubSectionPermissions()" name="Live" aria-label="Make live">{{subSectionTab.Live ? 'Live' : 'Not Live'}}</md-switch>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-if="checkSubSectionPermissions()">
+                <p class="error-block" ng-if="apiErrors">{{apiErrors}}</p>
+                <button class="btn btn-primary" type="submit" ng-click="saveSubSectionTab()" ng-disabled="form.subSectionTab.$invalid || !subSectionTab.Icon || apiErrors">Save</button>
+                <button class="btn btn-warning" type="button" ui-sref="subSectionTabs.list">Back</button>
+            </div>
+        </div>
+    </div>
+</form>

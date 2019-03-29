@@ -1,0 +1,27 @@
+//Beacon Clinical Guidelines
+//Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+//
+//You should have received a copy of the GNU Affero General Public License
+//along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+// 
+// See LICENSE in the project root for license information.
+// Rotated & Flipped Icons
+// -------------------------
+
+.#{$fa-css-prefix}-rotate-90  { @include fa-icon-rotate(90deg, 1);  }
+.#{$fa-css-prefix}-rotate-180 { @include fa-icon-rotate(180deg, 2); }
+.#{$fa-css-prefix}-rotate-270 { @include fa-icon-rotate(270deg, 3); }
+
+.#{$fa-css-prefix}-flip-horizontal { @include fa-icon-flip(-1, 1, 0); }
+.#{$fa-css-prefix}-flip-vertical   { @include fa-icon-flip(1, -1, 2); }
+
+// Hook for IE8-9
+// -------------------------
+
+:root .#{$fa-css-prefix}-rotate-90,
+:root .#{$fa-css-prefix}-rotate-180,
+:root .#{$fa-css-prefix}-rotate-270,
+:root .#{$fa-css-prefix}-flip-horizontal,
+:root .#{$fa-css-prefix}-flip-vertical {
+  filter: none;
+}

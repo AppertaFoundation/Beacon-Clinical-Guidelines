@@ -1,0 +1,13 @@
+//Beacon Clinical Guidelines
+//Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+//
+//You should have received a copy of the GNU Affero General Public License
+//along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+// 
+// See LICENSE in the project root for license information.
+/*!
+ * AngularJS Material Design
+ * https://github.com/angular/material
+ * @license MIT
+ * v1.1.5-master-515959d
+ */.md-panel.md-tooltip.md-THEME_NAME-theme{color:"{{background-700-contrast}}";background-color:"{{background-700}}"}

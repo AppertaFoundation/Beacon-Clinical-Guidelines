@@ -1,0 +1,32 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div class="modal-header">
+    <button class="btn btn-primary" type="button" style="float: right;" ng-click="dismissModal()">Close</button>
+</div>
+<div class="modal-body" id="modal-body">
+    <md-card ng-style="{ 'border-left': 'solid 10px' + departmentMainColour, 'border-bottom': 'solid 2px' + departmentBackgroundColour }">
+        <md-card-header ng-style="{ 'background-color': departmentBackgroundColour, 'padding-top': '10px', 'padding-bottom': '10px' }">
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                <h3 id="email-title">{{ emailTitle }}</h3>
+            </div>            
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <i class="icon ion-clipboard" style="padding-top: 5px; font-size: 3.5em;" ng-click="copyToClipboard(emailTitle)" style="float: right;"></i>
+                <p>Copy Email Title</p>
+            </div>
+</md-card-header>
+        <md-card-content>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                <h4 id="email-title">{{ emailBody }}</h4>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <i class="icon ion-clipboard" style="padding-top: 5px; font-size: 3.5em;" ng-click="copyToClipboard(emailBody + '\r' + emailLink)" style="float: right;"></i>
+                <p>Copy Email Body</p>
+            </div>
+        </md-card-content>
+    </md-card>
+</div>

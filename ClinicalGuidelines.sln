@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicalGuidelines", "ClinicalGuidelines\ClinicalGuidelines.csproj", "{6EDAF334-83B8-46D1-A891-AF95955FDA6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicalGuidelinesTest", "ClinicalGuidelinesTest\ClinicalGuidelinesTest.csproj", "{4FDA5A5C-9E01-401B-95ED-D093D813EA40}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Test|Any CPU = Test|Any CPU
+		UAT|Any CPU = UAT|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6EDAF334-83B8-46D1-A891-AF95955FDA6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EDAF334-83B8-46D1-A891-AF95955FDA6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EDAF334-83B8-46D1-A891-AF95955FDA6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EDAF334-83B8-46D1-A891-AF95955FDA6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EDAF334-83B8-46D1-A891-AF95955FDA6F}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{6EDAF334-83B8-46D1-A891-AF95955FDA6F}.Test|Any CPU.Build.0 = Test|Any CPU
+		{6EDAF334-83B8-46D1-A891-AF95955FDA6F}.UAT|Any CPU.ActiveCfg = UAT|Any CPU
+		{6EDAF334-83B8-46D1-A891-AF95955FDA6F}.UAT|Any CPU.Build.0 = UAT|Any CPU
+		{4FDA5A5C-9E01-401B-95ED-D093D813EA40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FDA5A5C-9E01-401B-95ED-D093D813EA40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FDA5A5C-9E01-401B-95ED-D093D813EA40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FDA5A5C-9E01-401B-95ED-D093D813EA40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FDA5A5C-9E01-401B-95ED-D093D813EA40}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{4FDA5A5C-9E01-401B-95ED-D093D813EA40}.Test|Any CPU.Build.0 = Release|Any CPU
+		{4FDA5A5C-9E01-401B-95ED-D093D813EA40}.UAT|Any CPU.ActiveCfg = Release|Any CPU
+		{4FDA5A5C-9E01-401B-95ED-D093D813EA40}.UAT|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://vm-app-tfs01:8080/tfs/business%20apps
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ClinicalGuidelines\\ClinicalGuidelines.csproj
+		SccProjectName1 = ClinicalGuidelines
+		SccLocalPath1 = ClinicalGuidelines
+		SccProjectUniqueName2 = ClinicalGuidelinesTest\\ClinicalGuidelinesTest.csproj
+		SccProjectName2 = ClinicalGuidelinesTest
+		SccLocalPath2 = ClinicalGuidelinesTest
+	EndGlobalSection
+EndGlobal

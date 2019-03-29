@@ -1,0 +1,66 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div ng-init="paginateSubSectionTabs()">
+    <h2>Department Sub Sections Administration</h2>
+    <p>Below is a list of current sub sections associated with beacon.</p>
+    <p class="error-block-large">{{apiErrors}}</p>
+
+    <div ng-if="!subSectionTabs.length">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left" style="padding-left: 0;">
+            <span ng-if="loadComplete">
+                <input ng-model="pagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && pageChanged()" ng-blur="pageChanged()">
+            </span>
+        </div>
+    </div>
+
+    <div ng-if="subSectionTabs.length">
+        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 text-left" style="padding-left: 0;">
+            <span ng-if="loadComplete">
+                <input ng-model="pagination.searchTerm" placeholder="Search..." class="form-control" style="width: 185px; display: inline;" ng-keyup="$event.keyCode == 13 && pageChanged()" ng-blur="pageChanged()">
+            </span>
+        </div>
+        <div class="col-lg-8 col-md-8 col-sm-4 col-xs-4 text-center">
+            <uib-pagination total-items="pagination.totalItems" items-per-page="pagination.pageSize" ng-model="pagination.currentPage" ng-change="pageChanged()"></uib-pagination>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4 text-right" style="padding-right: 0;">
+            <select ng-model="pagination.pageSize"
+                    class="form-control"
+                    style="width: 185px; display: inline;"
+                    ng-options="pageSize.Id as pageSize.Name for pageSize in pageSizeOptions"
+                    ng-change="pageChanged()"></select>
+        </div>
+    </div>
+
+    <table ng-show="subSectionTabs.length" class="table table-striped table-hover table-condensed userTable">
+        <tr>
+            <th style="width: 5%;">Icon</th>
+            <th style="width: 60%;">Name</th>
+            <th style="width: 10%;">Status</th>
+            <th style="width: 25%;">Actions</th>
+        </tr>
+        <tr ng-repeat="subSectionTab in subSectionTabs">
+            <td><i style="font-size: 3em; line-height: 15px;" class="{{subSectionTab.Icon}}"></i></td>
+            <td>{{subSectionTab.Name}}</td>
+            <td><span ng-if="subSectionTab.Archived">Archived</span><span ng-if="!subSectionTab.Archived">{{subSectionTab.Live ? 'Live' : 'Not Live'}}</span></td>
+            <td>
+                <div class="btn-group btn-group" role="group" ng-if="checkSubSectionPermissions()">
+                    <a ui-sref="subSectionTabs.form({subSectionTabId: subSectionTab.Id})" class="btn btn-xs btn-warning modalTrigger" ng-if="!subSectionTab.Archived"><i class="fa fa-edit"></i> Edit</a>
+                    <a ng-click="archiveSubSectionTab(subSectionTab.Id);$event.stopPropagation();" class="btn btn-xs btn-danger modalTrigger" ng-if="!subSectionTab.Archived"><i class="fa fa-times"></i> Archive</a>
+                    <a ng-click="unArchiveSubSectionTab(subSectionTab.Id);$event.stopPropagation();" class="btn btn-xs btn-danger modalTrigger" ng-if="subSectionTab.Archived"><i class="fa fa-times"></i> Unarchive</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <p ng-show="(!subSectionTabs.length && loadComplete) && !pagination.searchTerm">There are currently no departments in the database.</p>
+    <p ng-show="(!subSectionTabs.length && loadComplete) && pagination.searchTerm">Your search produced 0 results.</p>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right" style="padding-right: 0;">
+        <button class="btn btn-primary" type="button" ng-click="addSubSectionTab()" ng-if="checkSubSectionPermissions() && loadComplete">Add a new section</button>
+    </div>
+</div>

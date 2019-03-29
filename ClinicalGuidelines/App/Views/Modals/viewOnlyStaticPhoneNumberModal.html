@@ -1,0 +1,26 @@
+<!-- Beacon Clinical Guidelines
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+See LICENSE in the project root for license information. -->
+﻿<div class="modal-header">
+    <button class="btn btn-primary" type="button" style="float: right;" ng-click="dismissModal()">Close</button>
+</div>
+<div class="modal-body" id="modal-body">
+    <md-card ng-repeat="contact in contacts | orderBy: ['DepartmentName', 'Title']" ng-style="{ 'border-left': 'solid 10px' + contact.DepartmentMainColour, 'border-bottom': 'solid 2px' + contact.DepartmentMainColour }">
+        <md-card-header ng-style="{ 'background-color': contact.DepartmentBackgroundColour, 'padding-top': '10px', 'padding-bottom': '10px' }">
+            <h4>
+                <span>{{contact.DepartmentName + ' '}}</span> 
+            </h4> 
+        </md-card-header>
+        <md-card-content>
+            <h4>{{contact.Title}}</h4>
+            <h4>{{ contact.TypeName + ': ' + contact.PhoneNumber}}</h4>
+        </md-card-content>
+    </md-card>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="dismissModal()">Close</button>
+</div>
