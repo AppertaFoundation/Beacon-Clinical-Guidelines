@@ -1,9 +1,9 @@
 //Beacon Clinical Guidelines
-//Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+//Copyright (C) 2019  University Hospitals Plymouth NHS Trust
 //
 //You should have received a copy of the GNU Affero General Public License
-//along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-// 
+//along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 // See LICENSE in the project root for license information.
 ﻿app.controller("usersCtrl", ["$scope", "$rootScope", "$location", "$uibModal", "cfpLoadingBar", "httpService", "$filter", "$state", "modelService", function ($scope, $rootScope, $location, $uibModal, cfpLoadingBar, httpService, $filter, $state, modelService) {
     $scope.loadComplete = false;
@@ -15,6 +15,9 @@
     $scope.editingUser = null;
     $scope.searchUsers = null;
     $scope.selectedUser = {};
+
+    $scope.departments = null;
+    $scope.containers = null;
 
     //#region Layout functions - called on all pages
     var userSuffix = " users per page";
@@ -137,7 +140,7 @@
     $scope.addUserToForm = function (selectedUser) {
         if (!selectedUser) return;
         $scope.editingUser = {
-            "SamAccountName": selectedUser.SamAccountName,
+            "SamAccountName": selectedUser.SamAccountName, //AD Username
             "Forename": selectedUser.Forename,
             "Surname": selectedUser.Surname,
             "JobTitle": selectedUser.JobTitle,
@@ -195,9 +198,9 @@
             }
             return false;
         };
-      
+
         for (var y = 0; y < $scope.departments.length; y++) {
-            //New
+            //New Department
             if ($scope.departments[y].selectedAsAdmin) {
                 if (!isAlreadySet($scope.departments[y])) {
                     console.log('should add ' + $scope.departments[y].Name);
@@ -229,14 +232,14 @@
                     httpService.postUserAdministrationDepartment(userId, departmentId).then(successCallback, errorCallback);
                 }
             }
-            //Removed
+            //Removed Department
             else {
                 if (isAlreadySet($scope.departments[y])) {
                     console.log('should remove' + $scope.departments[y].Name);
 
                     var userId = $scope.editingUser.Id;
                     var departmentId = $scope.departments[y].Id;
-                    
+
 
                     var successCallback = function () {
                         console.log('success');
@@ -274,8 +277,6 @@
         $scope.getDepartments();
     };
 
-    $scope.departments = null;
-    $scope.containers = null;
     $scope.getDepartments = function () {
         $scope.loadComplete = false;
         $rootScope.errorRetry = false;

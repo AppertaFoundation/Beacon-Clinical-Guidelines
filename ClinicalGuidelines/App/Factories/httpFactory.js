@@ -1,12 +1,12 @@
 //Beacon Clinical Guidelines
-//Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+//Copyright (C) 2019  University Hospitals Plymouth NHS Trust
 //
 //You should have received a copy of the GNU Affero General Public License
-//along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-// 
+//along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 // See LICENSE in the project root for license information.
 ﻿app.factory("httpService", ["$http", "$rootScope", function ($http, $rootScope) {
-    var httpService = {};
+    var httpService = {}; //Single object with all calls added to it, then returned. httpService can be injected to angualr controllers and functions can be called to return promises with the API response
 
     //GET
     httpService.getUsers = function () {
@@ -50,7 +50,7 @@
     httpService.getEditableDepartments = function () {
         return $http.get($rootScope.httpServiceLocation + "/api/department/get/editable");
     };
-    
+
     httpService.getAllDepartments = function () {
         return $http.get($rootScope.httpServiceLocation + "/api/department/get/all");
     };
@@ -227,7 +227,7 @@
             data: article
         });
     };
-    
+
     httpService.postArticleTemplate = function (articleTemplate) {
         return $http({
             method: "post",

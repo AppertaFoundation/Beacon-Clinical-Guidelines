@@ -1,24 +1,22 @@
 //Beacon Clinical Guidelines
-//Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+//Copyright (C) 2019  University Hospitals Plymouth NHS Trust
 //
 //You should have received a copy of the GNU Affero General Public License
-//along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-// 
+//along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 // See LICENSE in the project root for license information.
 ﻿/**
- * This was originally code from git hub however the controller didn't do everything I needed it to the original is here 
+ * This was originally code from git hub however the controller didn't do everything I needed it to the original is here
  * https://github.com/ONE-LOGIC/md-color-menu
- * 
+ *
  * Changes made
- * 
+ *
  * 1. used a newer version of angular that needed a bug fix below showTooltips: '=?' added ? to make optional
  * 2. changed directive colour swatch template to show a remove colour option
- * 3. changed directive template to accept a callback to update the parent controller when a colour is selected or removed 
+ * 3. changed directive template to accept a callback to update the parent controller when a colour is selected or removed
  *       needed this as i am looking for selected options to prove the form is completed
 **/
-
 (function () {
-
     angular
       .module('mdColorMenu', ['ngAria', 'ngAnimate', 'ngMaterial'])
       .factory('mdPickerColors', ['$mdColorPalette', mdPickerColors])
