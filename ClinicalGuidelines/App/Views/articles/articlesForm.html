@@ -1,5 +1,5 @@
 <!-- Beacon Clinical Guidelines
-Copyright (C) 2019  University Hospitals Plymouth NHS Trust 
+Copyright (C) 2019  University Hospitals Plymouth NHS Trust
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
@@ -35,10 +35,10 @@ See LICENSE in the project root for license information. -->
     }
     .mobilePreviewContainer th {
         background: {{department.MainColour}} !important;
-    } 
+    }
     .mobilePreviewContainer td {
         background: {{department.BackgroundColour}} !important;
-    }  
+    }
 </style>
 
 <form name="form.article" novalidate>
@@ -49,10 +49,12 @@ See LICENSE in the project root for license information. -->
                     <div ng-if="!articleFormLocked">
                         <h3>{{article.Id ? 'Edit this' : 'Add a'}} article</h3>
                     </div>
+
                     <div ng-if="articleFormLocked">
                         <div ng-if="user.SiteAdmin || user.LeadClinician || user.ContentApprover">
                             <h3>Article Approval</h3>
                         </div>
+
                         <div ng-if="user.ContentEditor && !user.SiteAdmin && !user.LeadClinician && !user.ContentApprover">
                             <h3>Article Form Locked</h3>
                         </div>
@@ -64,11 +66,13 @@ See LICENSE in the project root for license information. -->
                         <div style="margin-top: 20px; display: block; width: 100%; height: 50px;">
                             <button class="btn btn-primary" type="submit" style="float: right;" ng-click="toggleArticleHistory()">{{articleHistoryToggle ? 'Hide' : 'Show'}} article history</button>
                         </div>
+
                         <div ng-if="articleHistoryToggle" style="width: 100%; float: right; display: block;">
                             <p ng-repeat="articleRevision in articleHistory" style="width: 100%; float: right; display: block; text-align: right; margin-bottom: 1px;">
                                 <span ng-if="articleRevision.Live">
                                     <strong>[LIVE]</strong>
                                 </span>
+
                                 Revision number: {{articleRevision.Id}}, created on {{articleRevision.RevisionDateTime | date : 'medium'}} by {{articleRevision.User}}.
                                 <span>
                                     <button ng-if="(article.RevisionDateTime === articleRevision.RevisionDateTime)" class="btn btn-sm btn-success" type="submit">Current Revision</button>
@@ -85,6 +89,7 @@ See LICENSE in the project root for license information. -->
                             <p>Please review the proposed article to the right and either approve or reject the change. Approval will automatically make this article or revision of article live on site.</p>
                             <p>You can see details of the department and section in the form below and use the article history to view any old revisions if this isn't new content.</p>
                         </div>
+
                         <div ng-if="user.ContentEditor && !user.SiteAdmin && !user.LeadClinician && !user.ContentApprover">
                             <p>This content is now locked and the content has been added to the approvals queue for a site administrator or content approver to make live.</p>
                         </div>
@@ -161,30 +166,30 @@ See LICENSE in the project root for license information. -->
 
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-if="!articleFormLocked">
                 <div class="form-group">
-                        
+
                     <label>Current State of this revision</label>
                     <p ng-if="!article.Live && (user.SiteAdmin || user.LeadClinician || user.ContentApprover)">Making this article revsion live will make it available in the beacon app when saved if another revision is live it will unpublish that at the same time.</p>
                     <p ng-if="!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover">Only site administrators and content approvers can make articles live if you are a content editor use the section to the right to send this for approval.<br/><br/> If this content is already live when you save this will be saved as a new revision of the article and not over-right the current live copy. You can edit this revision as often as you like until it is sent for approval once this happens the page is uneditable until it has been reviewed.
                     </p>
                     <md-switch ng-model="article.Live" name="Live" aria-label="Make live" ng-disabled="!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover">{{article.Live ? 'Live' : 'Not Live'}}</md-switch>
                 </div>
-                
+
             </div>
-                
+
             <div ng-if="expiryStatusSet" class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <div ng-if="applyExpiredClassToArticleExpiryDate() === 'expired'">
                     <h4 ng-model="article.ExpiryDateTime" style="color: red;" ng-class="applyExpiredClassToArticleExpiryDate()">Expired on: {{ article.ExpiryDateTime | formatDateFunction }}</h4>
                 </div>
+
                 <div ng-if="applyExpiredClassToArticleExpiryDate() !== 'expired'">
                     <h4 ng-model="article.ExpiryDateTime" ng-class="applyExpiredClassToArticleExpiryDate()">Expires on: {{ article.ExpiryDateTime | formatDateFunction }}</h4>
                 </div>
-                <h4 ng-model="newProposedDate" ng-class="applyExpiredClassToProposedExpiryDate()">New Proposed Expiry Date: {{ newProposedDate | formatDateFunction }}</h4>
 
+                <h4 ng-model="newProposedDate" ng-class="applyExpiredClassToProposedExpiryDate()">New Proposed Expiry Date: {{ newProposedDate | formatDateFunction }}</h4>
 
                 <i class="fa fa-calendar-check-o fa-2x" aria-hidden="true" ng-click="toggleCalendar()"></i>
 
                 <datepicker ng-if="viewCalendar" name="ExpiryDateTime" ng-model="calendarSelectedDate.date" ng-click="clearRadioButtons()" ng-change="setExpiryDateFromCalendar()" md-placeholder="Select date"></datepicker>
-               
 
                 <md-radio-group ng-model="data.group1" class="md-primary" layout="row">
                     <p style="margin-right: 10px; padding-top: 7px;">Months from today: </p>
@@ -233,13 +238,13 @@ See LICENSE in the project root for license information. -->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-if="(user.SiteAdmin || user.LeadClinician || user.ContentEditor || user.ContentApprover) && !articleFormLocked">
                     <div class="form-group">
                         <label>Terms</label>
-                        <md-chips ng-model="article.Terms"
-                                  md-transform-chip="newTerm($chip)">
+                        <md-chips ng-model="article.Terms" md-transform-chip="newTerm($chip)">
                             <md-chip-template>
                                 <span>
                                     <strong>{{$chip.Name}}</strong>
                                 </span>
                             </md-chip-template>
+
                             <button md-chip-remove class="md-primary termchip">
                                 <md-icon md-svg-icon="md-close"></md-icon>
                             </button>
@@ -249,13 +254,14 @@ See LICENSE in the project root for license information. -->
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-if="(user.SiteAdmin || user.LeadClinician || user.ContentEditor || user.ContentApprover) && !articleFormLocked">
                     <div class="form-group">
-                        
                         <label>Gallery View</label>
-                        <p ng-if="!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover">Only site administrators and content approvers can make articles live if you are a content editor use the section to the right to send this for approval.<br/><br/> If this content is already live when you save this will be saved as a new revision of the article and not over-right the current live copy. You can edit this revision as often as you like until it is sent for approval once this happens the page is uneditable until it has been reviewed.
-                        </p>
+
+                        <p ng-if="!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover">Only site administrators and content approvers can make articles live if you are a content editor use the section to the right to send this for approval.<br/><br/> If this content is already live when you save this will be saved as a new revision of the article and not over-right the current live copy. You can edit this revision as often as you like until it is sent for approval once this happens the page is uneditable until it has been reviewed.</p>
+
                         <md-switch ng-model="article.ShowGallery" name="Live" aria-label="Make gallery live" ng-disabled="!user.SiteAdmin && !user.LeadClinician && !user.ContentApprover">{{article.ShowGallery ? 'Show Gallery' : 'Hide Gallery'}}</md-switch>
 
                         <label>Article Images</label>
+
                         <div>
                             <p>Add images to the article by either clicking the upload area below or dragging files onto it. The way that the images will be displayed in the app will be desided by the app. This will reflect in the preview to the right.</p>
                             <p ng-if="article.uploadError" style="color: red; font-weight: bold;">{{article.uploadError}}</p>
@@ -286,7 +292,7 @@ See LICENSE in the project root for license information. -->
                         <p ng-repeat="(key, image) in article.images track by image.PreviewId">
                             <img ng-src="data:image/png;base64, {{image.image}}" style="height: 50px; border: 1px solid black;">
                             <span style="position: absolute; left: 100px; line-height: 50px; vertical-align: middle; margin-left: 5px;">
-                                {{image.OriginalFileName}} - added by {{image.UploadedBy}}  
+                                {{image.OriginalFileName}} - added by {{image.UploadedBy}}
                                 <span>
                                       <button class="btn btn-xs btn-danger " type="button" ng-click="removeArticleImage(key)">Remove</button>
                                 </span>
